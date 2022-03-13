@@ -12,7 +12,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         // Make sure this is before calling super.onCreate
         setTheme(R.style.Theme_CarManagementClientApp);
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(SplashScreenActivity.this, MainActivity.class));
+        startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
         finish();
     }
 }
