@@ -4,6 +4,148 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".activities.HomeActivity">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/sheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <FrameLayout
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:background="@drawable/rounded_sheet"
+            style="?attr/bottomSheetStyle"
+            app:behavior_peekHeight="130dp"
+            app:behavior_draggable="true"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            <!--Content-->
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_remove_24"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center|top"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rideRequestLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="12dp"
+                android:background="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/pickUpIndicator"
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/sheet_circle_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/pickUpEditText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/pickUpEditText" />
+
+                <EditText
+                    android:id="@+id/pickUpEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/light_grey"
+                    android:ellipsize="end"
+                    android:hint="Pick-up Location"
+                    android:paddingStart="8dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="6dp"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/pickUpIndicator"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/dropIndicator"
+                    app:layout_constraintEnd_toEndOf="@+id/pickUpIndicator"
+                    app:layout_constraintStart_toStartOf="@+id/pickUpIndicator"
+                    app:layout_constraintTop_toBottomOf="@+id/pickUpIndicator" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dropIndicator"
+                    android:layout_width="9dp"
+                    android:layout_height="9dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@android:color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/destinationEditText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/destinationEditText" />
+
+                <EditText
+                    android:id="@+id/destinationEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/light_grey"
+                    android:ellipsize="end"
+                    android:hint="Destination"
+                    android:paddingStart="8dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="6dp"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/submitRideRequest"
+                    app:layout_constraintStart_toEndOf="@+id/dropIndicator"
+                    app:layout_constraintTop_toBottomOf="@+id/pickUpEditText" />
+
+                <Button
+                    android:id="@+id/submitRideRequest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginRight="13dp"
+                    android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+                    android:drawableTint="@color/white"
+                    android:backgroundTint="@drawable/ride_submit_button"
+                    android:enabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/destinationEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/pickUpEditText"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

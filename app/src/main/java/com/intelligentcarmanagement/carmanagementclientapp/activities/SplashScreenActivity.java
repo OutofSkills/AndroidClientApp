@@ -1,9 +1,11 @@
-package com.intelligentcarmanagement.carmanagementclientapp;
+package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.intelligentcarmanagement.carmanagementclientapp.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

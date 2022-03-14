@@ -5,8 +5,12 @@
       <map>
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/circle.xml" value="0.12685185185185185" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/grad.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ride_submit_button.xml" value="0.25" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/rounded_sheet.xml" value="0.25" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/sheet_circle_black.xml" value="0.25" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/splash_screen.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_drawer_base.xml" value="0.2501302761855133" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_home.xml" value="0.1598731884057971" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_login.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_main.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_register.xml" value="0.264" />
