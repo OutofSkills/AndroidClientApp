@@ -2,20 +2,35 @@ package com.intelligentcarmanagement.carmanagementclientapp.models;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Ride {
+import java.io.Serializable;
+
+public class Ride implements Serializable {
+    private int driverId;
     private String pickUpAddress;
     private String destinationAddress;
-    private LatLng pickUpLatLng;
-    private LatLng destinationLatLng;
+    private String pickUpLat;
+    private String pickUpLng;
+    private String destinationLat;
+    private String destinationLng;
 
     public Ride() {
     }
 
-    public Ride(String pickUpAddress, String destinationAddress, LatLng pickUpLatLng, LatLng destinationLatLng) {
+    public Ride(String pickUpAddress, String destinationAddress, String pickUpLat, String pickUpLng, String destinationLat, String destinationLng) {
         this.pickUpAddress = pickUpAddress;
         this.destinationAddress = destinationAddress;
-        this.pickUpLatLng = pickUpLatLng;
-        this.destinationLatLng = destinationLatLng;
+        this.pickUpLat = pickUpLat;
+        this.pickUpLng = pickUpLng;
+        this.destinationLat = destinationLat;
+        this.destinationLng = destinationLng;
+    }
+
+    public int getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(int driverId) {
+        this.driverId = driverId;
     }
 
     public String getPickUpAddress() {
@@ -34,19 +49,35 @@ public class Ride {
         this.destinationAddress = destinationAddress;
     }
 
-    public LatLng getPickUpLatLng() {
-        return pickUpLatLng;
+    public String getPickUpLat() {
+        return pickUpLat;
     }
 
-    public void setPickUpLatLng(LatLng pickUpLatLng) {
-        this.pickUpLatLng = pickUpLatLng;
+    public void setPickUpLat(String pickUpLat) {
+        this.pickUpLat = pickUpLat;
     }
 
-    public LatLng getDestinationLatLng() {
-        return destinationLatLng;
+    public String getPickUpLng() {
+        return pickUpLng;
     }
 
-    public void setDestinationLatLng(LatLng destinationLatLng) {
-        this.destinationLatLng = destinationLatLng;
+    public void setPickUpLng(String pickUpLng) {
+        this.pickUpLng = pickUpLng;
+    }
+
+    public String getDestinationLat() {
+        return destinationLat;
+    }
+
+    public void setDestinationLat(String destinationLat) {
+        this.destinationLat = destinationLat;
+    }
+
+    public String getDestinationLng() {
+        return destinationLng;
+    }
+
+    public void setDestinationLng(String destinationLng) {
+        this.destinationLng = destinationLng;
     }
 }

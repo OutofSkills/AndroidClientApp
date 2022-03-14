@@ -29,7 +29,7 @@
             android:background="@drawable/rounded_sheet"
             style="?attr/bottomSheetStyle"
             app:behavior_peekHeight="130dp"
-            app:behavior_draggable="true"
+            app:behavior_draggable="false"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
             <!--Content-->
 

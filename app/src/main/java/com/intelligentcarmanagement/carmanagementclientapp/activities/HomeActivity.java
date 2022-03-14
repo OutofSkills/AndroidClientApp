@@ -2,9 +2,11 @@ package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -15,13 +17,24 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.maps.DirectionsApi;
+import com.google.maps.DirectionsApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.model.DirectionsLeg;
+import com.google.maps.model.DirectionsResult;
+import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.DirectionsStep;
+import com.google.maps.model.EncodedPolyline;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityHomeBinding;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
@@ -33,15 +46,21 @@ import java.util.List;
 public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "HomeActivity";
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     ActivityHomeBinding homeBinding;
     // Autocomplete
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
     private EditText pickUpEditText, destinationEditText;
     private boolean pickUpRequest, destinationRequest;
 
+    // Ride request submit button
+    Button submitRideRequest;
+
     // Google Maps
     private GoogleMap map;
+    MarkerOptions pickUpMarker, destinationMarker;
+    // Maps polyline route
+    private Polyline polyline;
 
     // Ride data
     private Ride ride;
@@ -58,12 +77,17 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
         // View bindings
         pickUpEditText = findViewById(R.id.pickUpEditText);
         destinationEditText = findViewById(R.id.destinationEditText);
+        submitRideRequest = findViewById(R.id.submitRideRequest);
 
         // Setting events listeners
         setEventListeners();
 
         //Initialize section
         ride = new Ride();
+        pickUpMarker = new MarkerOptions();
+        pickUpMarker.title("Pick-up");
+        destinationMarker = new MarkerOptions();
+        destinationMarker.title("Destination");
 
         // Setup google maps,
         // obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -76,7 +100,7 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     // and set a callback to obtain results
     private void searchPlace() {
         if (!Places.isInitialized()) {
-            Places.initialize(this, getApplication().getString(R.string.google_maps_key));
+            Places.initialize(this, getResources().getString(R.string.google_maps_key));
         }
         // Set the fields to specify which types of place data to
         // return after the user has made a selection.
@@ -97,12 +121,14 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getLatLng() + ", " + place.getAddress());
                 if(pickUpRequest) {
-                    pickUpEditText.setText(place.getName());
-                    pickUpRequest = false;
+                    setPickUpInformation(place);
+                    pickUpMarker.position(place.getLatLng());
+                    map.addMarker(pickUpMarker);
                 }
                 else if(destinationRequest) {
-                    destinationEditText.setText(place.getName());
-                    destinationRequest = false;
+                    setDestinationInformation(place);
+                    destinationMarker.position(place.getLatLng());
+                    map.addMarker(destinationMarker);
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -142,8 +168,78 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
 
         // Add a marker in Sydney and move the camera
         LatLng bucharest = new LatLng(44.439663, 26.096306);
-        map.addMarker(new MarkerOptions().position(bucharest).title("Marker in Bucharest"));
         map.moveCamera(CameraUpdateFactory.newLatLng(bucharest));
+    }
+
+    // Draw a route between the 2 given places
+    private void drawRoute(LatLng pickUp, LatLng destination)
+    {
+        //Define list to get all lat and lng for the route
+        List<LatLng> path = new ArrayList();
+
+        //Setup Directions API context
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey(getResources().getString(R.string.google_maps_key))
+                .build();
+
+        // Execute a direction request
+        DirectionsApiRequest req = DirectionsApi.getDirections(context, pickUp.latitude + "," + pickUp.longitude,
+                destination.latitude + "," + destination.longitude);
+        try {
+            DirectionsResult res = req.await();
+
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.length > 0) {
+                DirectionsRoute route = res.routes[0];
+
+                if (route.legs !=null) {
+                    for(int i=0; i<route.legs.length; i++) {
+                        DirectionsLeg leg = route.legs[i];
+                        if (leg.steps != null) {
+                            for (int j=0; j<leg.steps.length;j++){
+                                DirectionsStep step = leg.steps[j];
+                                if (step.steps != null && step.steps.length >0) {
+                                    for (int k=0; k<step.steps.length;k++){
+                                        DirectionsStep step1 = step.steps[k];
+                                        EncodedPolyline points1 = step1.polyline;
+                                        if (points1 != null) {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                            for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                path.add(new LatLng(coord1.lat, coord1.lng));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    EncodedPolyline points = step.polyline;
+                                    if (points != null) {
+                                        //Decode polyline and add points to list of route coordinates
+                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                        for (com.google.maps.model.LatLng coord : coords) {
+                                            path.add(new LatLng(coord.lat, coord.lng));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch(Exception ex) {
+            Log.e(TAG, "Fail: " + ex.getMessage());
+        }
+
+        //Draw the polyline
+        if (path.size() > 0) {
+            // First clear the existing route
+            if(polyline != null) polyline.remove();
+            // Create a new route for the provided pick-up and destination
+            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+            polyline = map.addPolyline(opts);
+
+            // Fit the points
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(getCenterOfPoints(path), 7));
+        }
     }
 
     // Define the event listeners here
@@ -183,5 +279,73 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
                 searchPlace();
             }
         });
+
+        // Ride request submit button
+        submitRideRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, AvailableDriversActivity.class);
+                intent.putExtra("RideRequest", ride);
+                startActivity(intent);
+            }
+        });
+    }
+
+    // Set ride pick-up information
+    private void setPickUpInformation(Place place)
+    {
+        ride.setPickUpAddress(place.getAddress());
+        ride.setPickUpLat(String.valueOf(place.getLatLng().latitude));
+        ride.setPickUpLng(String.valueOf(place.getLatLng().longitude));
+        pickUpEditText.setText(place.getName());
+        pickUpRequest = false;
+
+        // If the ride information (pick-up, destination) is provided
+        // then we can enable the submit button
+        if(!destinationEditText.getText().toString().matches(""))
+        {
+            submitRideRequest.setEnabled(true);
+            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
+                    new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+        }
+        else
+        {
+            if(submitRideRequest.isEnabled())
+                submitRideRequest.setEnabled(false);
+        }
+    }
+
+    // Set ride destination information
+    private void setDestinationInformation(Place place)
+    {
+        ride.setDestinationAddress(place.getAddress());
+        ride.setDestinationLat(String.valueOf(place.getLatLng().latitude));
+        ride.setDestinationLng(String.valueOf(place.getLatLng().longitude));
+        destinationEditText.setText(place.getName());
+        destinationRequest = false;
+
+        // If the ride information (pick-up, destination) is provided
+        // then we can enable the submit button
+        if(!pickUpEditText.getText().toString().matches(""))
+        {
+            submitRideRequest.setEnabled(true);
+            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
+                    new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+        }
+        else
+        {
+            if(submitRideRequest.isEnabled())
+                submitRideRequest.setEnabled(false);
+        }
+    }
+
+    // Get the center of 2 or more points
+    private LatLng getCenterOfPoints(List<LatLng> points){
+        LatLngBounds.Builder latLngBounds = LatLngBounds.builder();
+        for (LatLng latLng : points) {
+            latLngBounds.include(latLng);
+        }
+
+        return latLngBounds.build().getCenter();
     }
 }
