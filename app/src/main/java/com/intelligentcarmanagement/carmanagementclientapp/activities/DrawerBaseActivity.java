@@ -43,12 +43,16 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
         switch(item.getItemId())
         {
             case R.id.nav_history:
+                startActivity(new Intent(this, HistoryActivity.class));
+                overridePendingTransition(0, 0);
                 break;
             case R.id.nav_home:
                 startActivity(new Intent(this, HomeActivity.class));
                 overridePendingTransition(0, 0);
                 break;
             case R.id.nav_profile:
+                startActivity(new Intent(this, ProfileActivity.class));
+                overridePendingTransition(0, 0);
                 break;
             case R.id.nav_sign_out:
                 startActivity(new Intent(this, LoginActivity.class));

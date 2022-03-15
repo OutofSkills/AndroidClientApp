@@ -1,28 +1,87 @@
 package com.intelligentcarmanagement.carmanagementclientapp.models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
+import java.util.Date;
 
 public class Ride implements Serializable {
+    private int rideId;
     private int driverId;
-    private String pickUpAddress;
-    private String destinationAddress;
+    private String pickUpPlaceAddress;
+    private String pickUpPlaceName;
+    private String destinationPlaceAddress;
+    private String destinationPlaceName;
     private String pickUpLat;
     private String pickUpLng;
     private String destinationLat;
     private String destinationLng;
+    private double rideDistance;
+    private double averageTime;
+    private Date date;
 
     public Ride() {
     }
 
-    public Ride(String pickUpAddress, String destinationAddress, String pickUpLat, String pickUpLng, String destinationLat, String destinationLng) {
-        this.pickUpAddress = pickUpAddress;
-        this.destinationAddress = destinationAddress;
+    public Ride(int rideId, int driverId, String pickUpPlaceAddress, String pickUpPlaceName, String destinationPlaceAddress, String destinationPlaceName, String pickUpLat, String pickUpLng, String destinationLat, String destinationLng, double rideDistance, Date date) {
+        this.rideId = rideId;
+        this.driverId = driverId;
+        this.pickUpPlaceAddress = pickUpPlaceAddress;
+        this.pickUpPlaceName = pickUpPlaceName;
+        this.destinationPlaceAddress = destinationPlaceAddress;
+        this.destinationPlaceName = destinationPlaceName;
         this.pickUpLat = pickUpLat;
         this.pickUpLng = pickUpLng;
         this.destinationLat = destinationLat;
         this.destinationLng = destinationLng;
+        this.rideDistance = rideDistance;
+        this.date = date;
+    }
+
+    public double getAverageTime() {
+        return averageTime;
+    }
+
+    public void setAverageTime(double averageTime) {
+        this.averageTime = averageTime;
+    }
+
+    public double getRideDistance() {
+        return rideDistance;
+    }
+
+    public void setRideDistance(double rideDistance) {
+        this.rideDistance = rideDistance;
+    }
+
+    public int getRideId() {
+        return rideId;
+    }
+
+    public void setRideId(int rideId) {
+        this.rideId = rideId;
+    }
+
+    public String getPickUpPlaceName() {
+        return pickUpPlaceName;
+    }
+
+    public void setPickUpPlaceName(String pickUpPlaceName) {
+        this.pickUpPlaceName = pickUpPlaceName;
+    }
+
+    public String getDestinationPlaceName() {
+        return destinationPlaceName;
+    }
+
+    public void setDestinationPlaceName(String destinationPlaceName) {
+        this.destinationPlaceName = destinationPlaceName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getDriverId() {
@@ -33,20 +92,20 @@ public class Ride implements Serializable {
         this.driverId = driverId;
     }
 
-    public String getPickUpAddress() {
-        return pickUpAddress;
+    public String getPickUpPlaceAddress() {
+        return pickUpPlaceAddress;
     }
 
-    public void setPickUpAddress(String pickUpAddress) {
-        this.pickUpAddress = pickUpAddress;
+    public void setPickUpPlaceAddress(String pickUpPlaceAddress) {
+        this.pickUpPlaceAddress = pickUpPlaceAddress;
     }
 
-    public String getDestinationAddress() {
-        return destinationAddress;
+    public String getDestinationPlaceAddress() {
+        return destinationPlaceAddress;
     }
 
-    public void setDestinationAddress(String destinationAddress) {
-        this.destinationAddress = destinationAddress;
+    public void setDestinationPlaceAddress(String destinationPlaceAddress) {
+        this.destinationPlaceAddress = destinationPlaceAddress;
     }
 
     public String getPickUpLat() {

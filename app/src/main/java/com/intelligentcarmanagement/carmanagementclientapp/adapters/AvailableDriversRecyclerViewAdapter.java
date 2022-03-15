@@ -1,6 +1,7 @@
 package com.intelligentcarmanagement.carmanagementclientapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
+import com.intelligentcarmanagement.carmanagementclientapp.activities.AvailableDriversActivity;
+import com.intelligentcarmanagement.carmanagementclientapp.activities.ConfirmRideRequestActivity;
+import com.intelligentcarmanagement.carmanagementclientapp.activities.HomeActivity;
+import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
 
 import java.util.ArrayList;
 
@@ -23,12 +28,16 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
     ArrayList<String> mDriversRating = new ArrayList<>();
     ArrayList<Integer> mDriversDistanceAway = new ArrayList<>();
 
-    public AvailableDriversRecyclerViewAdapter(Context mContext, ArrayList<Bitmap> mDriversAvatars, ArrayList<String> mDriversUsernames, ArrayList<String> mDriversRating, ArrayList<Integer> mDriversDistanceAway) {
+    // Ride partial data
+    Ride mRide;
+
+    public AvailableDriversRecyclerViewAdapter(Context mContext, ArrayList<Bitmap> mDriversAvatars, ArrayList<String> mDriversUsernames, ArrayList<String> mDriversRating, ArrayList<Integer> mDriversDistanceAway, Ride ride) {
         this.mDriversAvatars = mDriversAvatars;
         this.mDriversUsernames = mDriversUsernames;
         this.mDriversRating = mDriversRating;
         this.mDriversDistanceAway = mDriversDistanceAway;
         this.mContext = mContext;
+        mRide = ride;
     }
 
     @NonNull
@@ -45,6 +54,18 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
         holder.driverUsername.setText(mDriversUsernames.get(position));
         holder.driverRating.setText(mDriversRating.get(position));
         holder.driverDistanceAway.setText(mDriversDistanceAway.get(position).toString() + "km away");
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ConfirmRideRequestActivity.class);
+                // On click on a driver layout
+                // navigate to request confirmation view and
+                // transmit the complete ride data
+                intent.putExtra("RideRequest", mRide);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

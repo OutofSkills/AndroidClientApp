@@ -294,7 +294,8 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     // Set ride pick-up information
     private void setPickUpInformation(Place place)
     {
-        ride.setPickUpAddress(place.getAddress());
+        ride.setPickUpPlaceName(place.getName());
+        ride.setPickUpPlaceAddress(place.getAddress());
         ride.setPickUpLat(String.valueOf(place.getLatLng().latitude));
         ride.setPickUpLng(String.valueOf(place.getLatLng().longitude));
         pickUpEditText.setText(place.getName());
@@ -307,6 +308,10 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
             submitRideRequest.setEnabled(true);
             drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
                     new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+            // TODO: Calculate the distance between the 2 points
+            ride.setRideDistance(10.21);
+            // TODO: Calculate the average driving time
+            ride.setAverageTime(20.24);
         }
         else
         {
@@ -318,7 +323,8 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     // Set ride destination information
     private void setDestinationInformation(Place place)
     {
-        ride.setDestinationAddress(place.getAddress());
+        ride.setDestinationPlaceName(place.getName());
+        ride.setDestinationPlaceAddress(place.getAddress());
         ride.setDestinationLat(String.valueOf(place.getLatLng().latitude));
         ride.setDestinationLng(String.valueOf(place.getLatLng().longitude));
         destinationEditText.setText(place.getName());
@@ -331,6 +337,10 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
             submitRideRequest.setEnabled(true);
             drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
                     new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+            // TODO: Calculate the distance between the 2 points
+            ride.setRideDistance(12.21);
+            // TODO: Calculate the average driving time
+            ride.setAverageTime(20.20);
         }
         else
         {

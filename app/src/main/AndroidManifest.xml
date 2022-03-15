@@ -10,9 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarManagementClientApp">
         <activity
-            android:name=".activities.AvailableDriversActivity"
+            android:name=".activities.ConfirmRideRequestActivity"
             android:exported="false" />
-        <!-- Meta -->
+        <activity
+            android:name=".activities.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AvailableDriversActivity"
+            android:exported="false" /> <!-- Meta -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -22,8 +30,8 @@
 
         <activity
             android:name=".activities.DrawerBaseActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.HomeActivity"
             android:exported="false"

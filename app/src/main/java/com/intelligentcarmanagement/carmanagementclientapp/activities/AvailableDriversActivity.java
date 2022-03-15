@@ -13,14 +13,11 @@ import android.widget.Button;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
-import com.intelligentcarmanagement.carmanagementclientapp.activities.DrawerBaseActivity;
 import com.intelligentcarmanagement.carmanagementclientapp.adapters.AvailableDriversRecyclerViewAdapter;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityAvailableDriversBinding;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class AvailableDriversActivity extends DrawerBaseActivity {
 
@@ -70,9 +67,6 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
         // Get the intent data
         ride = (Ride) getIntent().getSerializableExtra("RideRequest");
 
-        // Test intent data
-        Log.d("AVAILABLE DRIVERS", "TEST: " + ride.getDestinationAddress());
-
         // Setup the recycler view
         recyclerView = findViewById(R.id.availableDriversRecyclerView);
         seedDriversData();
@@ -113,7 +107,7 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
 
     private void initRecyclerView()
     {
-        adapter = new AvailableDriversRecyclerViewAdapter(this, mDriversAvatars, mDriversUsernames, mDriversRating, mDriversDistanceAway);
+        adapter = new AvailableDriversRecyclerViewAdapter(this, mDriversAvatars, mDriversUsernames, mDriversRating, mDriversDistanceAway, ride);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
