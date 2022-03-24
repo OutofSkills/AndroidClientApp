@@ -50,7 +50,7 @@
                     android:background="@drawable/circle">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/notification_item_image"
+                        android:id="@+id/register_item_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/no_picture"
