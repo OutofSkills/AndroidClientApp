@@ -10,6 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarManagementClientApp">
         <activity
+            android:name=".activities.ProfileSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ChangeEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ConfirmRideRequestActivity"
             android:exported="false" />
         <activity
@@ -21,13 +33,6 @@
         <activity
             android:name=".activities.AvailableDriversActivity"
             android:exported="false" /> <!-- Meta -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
         <activity
             android:name=".activities.DrawerBaseActivity"
             android:exported="false"
@@ -55,6 +60,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>

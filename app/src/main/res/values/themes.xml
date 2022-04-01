@@ -17,4 +17,10 @@
     <style name="splashScreenTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
+
+    <!--Rounded image style-->
+    <style name="roundedImageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
