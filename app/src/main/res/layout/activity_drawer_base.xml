@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".activities.DrawerBaseActivity"
     tools:openDrawer="start"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    >
 
     <include layout="@layout/content_container_layout"
+        android:id="@+id/drawer_header_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent" />
 
@@ -21,5 +23,5 @@
         app:itemIconTint="@color/colorHeadings"
         app:headerLayout="@layout/drawer_header_layout"
         app:menu="@menu/main_drawer_menu" />
-    
+
 </androidx.drawerlayout.widget.DrawerLayout>
