@@ -5,6 +5,6 @@ import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.I
 import com.intelligentcarmanagement.carmanagementclientapp.models.User;
 
 public interface IUsersRepository {
-    public void getByEmail(String email, IGetUser getUserResponse);
-    public void update(int id, User user, IUpdateUser updateUserResponse);
+    public void getByEmail(String token, String email, IGetUser getUserResponse);
+    public void update(String token, int id, User user, IUpdateUser updateUserResponse);
 }

@@ -26,8 +26,11 @@ import com.intelligentcarmanagement.carmanagementclientapp.utils.SessionManager;
 import java.util.Map;
 
 public class LoginViewModel extends AndroidViewModel {
-    MutableLiveData<LoginState> mLoginStateMutableData = new MutableLiveData<>();
-    MutableLiveData<String> mLoginErrorMutableData = new MutableLiveData<>();
+    private static final String TAG = "LoginViewModel";
+
+    private MutableLiveData<LoginState> mLoginStateMutableData = new MutableLiveData<>();
+    private MutableLiveData<String> mLoginErrorMutableData = new MutableLiveData<>();
+    private String token;
 
     SessionManager sessionManager;
     IAccountsRepository mAccountsRepository;
@@ -38,6 +41,8 @@ public class LoginViewModel extends AndroidViewModel {
         mAccountsRepository = new AccountsRepository();
         mUsersRepository = new UsersRepository();
         sessionManager = new SessionManager(context);
+
+        token = sessionManager.getUserData().get(sessionManager.KEY_TOKEN);
     }
 
     public void login(String email, String password)
@@ -51,15 +56,21 @@ public class LoginViewModel extends AndroidViewModel {
             @Override
             public void onResponse(LoginResponse loginResponse) {
                 try {
-                    String token = loginResponse.getToken();
+                    token = loginResponse.getToken();
                     if(token == null) {
                         mLoginStateMutableData.setValue(LoginState.ERROR);
                         mLoginErrorMutableData.postValue("Server error. Please try again.");
+
+                        return;
                     }
+
+                    Log.d(TAG, "onResponse: " + token);
 
                     // Get the claims from the token
                     String payload = JwtParser.decoded(token);
                     Map<Object, Object> claims = decodeTokenClaims(payload);
+
+                    Log.d(TAG, "onResponse: " + claims.get("id").toString() + " " + claims.get("email").toString());
 
                     // Create a session
                     sessionManager.createLoginSession(claims.get("id").toString(), claims.get("email").toString(), token);
@@ -94,7 +105,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void fetchUser(String email){
 
-        mUsersRepository.getByEmail(email, new IGetUser() {
+        mUsersRepository.getByEmail("Bearer "+ token, email, new IGetUser() {
             @Override
             public void onResponse(User userResponse) {
                 sessionManager.addUserAvatar(userResponse.getAvatar());

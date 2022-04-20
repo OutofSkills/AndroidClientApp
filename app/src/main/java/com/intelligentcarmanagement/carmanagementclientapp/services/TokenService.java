@@ -32,6 +32,5 @@ public class TokenService {
     public static boolean isTokenExpired(long timeSpan) {
         return System.currentTimeMillis()/1000 >= timeSpan ? true : false;
     }
-
 }
 

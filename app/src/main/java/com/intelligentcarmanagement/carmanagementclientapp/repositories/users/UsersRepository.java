@@ -18,9 +18,9 @@ public class UsersRepository implements IUsersRepository{
 
     private static final String TAG = "UsersRepository";
 
-    public void getByEmail(String email, IGetUser getUserResponse) {
+    public void getByEmail(String token, String email, IGetUser getUserResponse) {
         IUsersRequest usersService = RetrofitService.getRetrofit().create(IUsersRequest.class);
-        Call<User> initRequest = usersService.getUserByEmail(email);
+        Call<User> initRequest = usersService.getUserByEmail(token, email);
 
         initRequest.enqueue(new Callback<User>() {
 
@@ -45,10 +45,10 @@ public class UsersRepository implements IUsersRepository{
         });
     }
 
-    public void update(int id, User user, IUpdateUser updateUserResponse)
+    public void update(String token, int id, User user, IUpdateUser updateUserResponse)
     {
         IUsersRequest usersService = RetrofitService.getRetrofit().create(IUsersRequest.class);
-        Call<User> initRequest = usersService.updateUser(id, user);
+        Call<User> initRequest = usersService.updateUser(token, id, user);
 
         initRequest.enqueue(new Callback<User>() {
 
