@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         loginRedirectRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Set a link to the Become a Driver FORM
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 

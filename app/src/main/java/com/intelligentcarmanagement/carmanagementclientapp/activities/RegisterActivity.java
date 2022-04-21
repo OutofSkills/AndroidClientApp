@@ -1,38 +1,53 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.google.android.material.imageview.ShapeableImageView;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
+
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
-    private static int RESULT_LOAD_IMAGE = 1;
-    
+
+    private static final String FIRST_FRAGMENT_TAG = "FirstFragment";
+    private static final String SECOND_FRAGMENT_TAG = "SecondFragment";
+    private static final String LAST_FRAGMENT_TAG = "LastFragment";
+
     // Redirect button to login
-    Button loginButtonRedirect;
-    // Register data holders
-    ShapeableImageView profileImage;
+    private Button loginButtonRedirect;
+
+    private RegisterFirstStepFragment defaultFragment;
+    private RegisterSecondStepFragment secondStepFragment;
+    private RegisterLastStepFragment lastStepFragment;
+
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Bind controls to views
-        loginButtonRedirect = findViewById(R.id.registerLoginRedirect);
-        profileImage = findViewById(R.id.register_item_image);
+        loginButtonRedirect = findViewById(R.id.register_redirect_to_login);
+
+        fragmentManager = getSupportFragmentManager();
+
+        defaultFragment = new RegisterFirstStepFragment();
+        secondStepFragment = new RegisterSecondStepFragment();
+        lastStepFragment = new RegisterLastStepFragment();
+
+        // Set the first(default) fragment
+        if(findViewById(R.id.register_fragment_container) != null)
+        {
+            setDefaultFragmentsState();
+        }
 
         // Set Event Listeners
         setEventListeners();
@@ -48,36 +63,135 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             }
         });
-
-        // Open the gallery and load an image on click
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openGallery();
-            }
-        });
     }
 
-    // Create an intent to open gallery window
-    private void openGallery() {
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, RESULT_LOAD_IMAGE);
-    }
-
-    // On image selected return its path
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == RESULT_LOAD_IMAGE){
-            Uri imageUri = data.getData();
-            setProfileImage(imageUri);
-        }
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        if(defaultFragment.getNextButton() != null)
+            defaultFragment.getNextButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: Click");
+                    switchToSecondFragment();
+                }
+            });
+
+        if(secondStepFragment.getNextButton() != null)
+            secondStepFragment.getNextButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: Click");
+                    switchToLastFragment();
+                }
+            });
+
+        if(secondStepFragment.getBackButton() != null)
+            secondStepFragment.getBackButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: Click");
+                    switchToFirstFragment();
+                }
+            });
+
+        if(lastStepFragment.getBackButton() != null)
+            lastStepFragment.getBackButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: Click");
+                    switchToSecondFragment();
+                }
+            });
+
+        if(lastStepFragment.getSubmitButton() != null)
+            lastStepFragment.getSubmitButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "onClick: Click");
+                    // TODO: Handle submit
+                }
+            });
     }
 
-    // Set the image control's content
-    private void setProfileImage(Uri profileImageURI)
+    private void setDefaultFragmentsState()
     {
-        // Load the image in the register view
-        profileImage.setImageURI(profileImageURI);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.register_fragment_container, defaultFragment, FIRST_FRAGMENT_TAG)
+                .add(R.id.register_fragment_container, secondStepFragment, SECOND_FRAGMENT_TAG)
+                .add(R.id.register_fragment_container, lastStepFragment, LAST_FRAGMENT_TAG)
+                .setReorderingAllowed(true)
+                .commit();
+
+
+        fragmentManager
+                .beginTransaction()
+                .hide(secondStepFragment)
+                .hide(lastStepFragment)
+                .commit();
+    }
+
+    private void switchToFirstFragment()
+    {
+        fragmentManager
+                .beginTransaction()
+                .hide(secondStepFragment)
+                .hide(lastStepFragment)
+                .commit();
+
+        if(fragmentManager.findFragmentByTag(FIRST_FRAGMENT_TAG) == null)
+            fragmentManager
+                .beginTransaction()
+                .add(R.id.register_fragment_container, defaultFragment, FIRST_FRAGMENT_TAG)
+                .setReorderingAllowed(true)
+                .commit();
+
+        fragmentManager
+                .beginTransaction()
+                .show(defaultFragment)
+                .commit();
+    }
+
+    private void switchToSecondFragment()
+    {
+        fragmentManager
+                .beginTransaction()
+                .hide(defaultFragment)
+                .hide(lastStepFragment)
+                .commit();
+
+        if(fragmentManager.findFragmentByTag(SECOND_FRAGMENT_TAG) == null)
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.register_fragment_container, secondStepFragment, SECOND_FRAGMENT_TAG)
+                    .setReorderingAllowed(true)
+                    .commit();
+
+        fragmentManager
+                .beginTransaction()
+                .show(secondStepFragment)
+                .commit();
+    }
+
+    private void switchToLastFragment()
+    {
+        fragmentManager
+                .beginTransaction()
+                .hide(defaultFragment)
+                .hide(secondStepFragment)
+                .commit();
+
+        if(fragmentManager.findFragmentByTag(LAST_FRAGMENT_TAG) == null)
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.register_fragment_container, lastStepFragment, LAST_FRAGMENT_TAG)
+                    .setReorderingAllowed(true)
+                    .commit();
+
+        fragmentManager
+                .beginTransaction()
+                .show(lastStepFragment)
+                .commit();
     }
 }
