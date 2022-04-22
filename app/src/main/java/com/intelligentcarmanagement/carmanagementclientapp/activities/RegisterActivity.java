@@ -20,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String FIRST_FRAGMENT_TAG = "FirstFragment";
     private static final String SECOND_FRAGMENT_TAG = "SecondFragment";
     private static final String LAST_FRAGMENT_TAG = "LastFragment";
+    private static final String SUCCESS_FRAGMENT_TAG = "SuccessFragment";
 
     // Redirect button to login
     private Button loginButtonRedirect;
@@ -27,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterFirstStepFragment defaultFragment;
     private RegisterSecondStepFragment secondStepFragment;
     private RegisterLastStepFragment lastStepFragment;
+    private RegisterSuccessFragment successFragment;
 
     private FragmentManager fragmentManager;
 
@@ -42,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         defaultFragment = new RegisterFirstStepFragment();
         secondStepFragment = new RegisterSecondStepFragment();
         lastStepFragment = new RegisterLastStepFragment();
+        successFragment = new RegisterSuccessFragment();
 
         // Set the first(default) fragment
         if(findViewById(R.id.register_fragment_container) != null)
@@ -109,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "onClick: Click");
-                    // TODO: Handle submit
+                    switchToSuccessFragment();
                 }
             });
     }
@@ -121,6 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .add(R.id.register_fragment_container, defaultFragment, FIRST_FRAGMENT_TAG)
                 .add(R.id.register_fragment_container, secondStepFragment, SECOND_FRAGMENT_TAG)
                 .add(R.id.register_fragment_container, lastStepFragment, LAST_FRAGMENT_TAG)
+                .add(R.id.register_fragment_container, successFragment, SUCCESS_FRAGMENT_TAG)
                 .setReorderingAllowed(true)
                 .commit();
 
@@ -129,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .beginTransaction()
                 .hide(secondStepFragment)
                 .hide(lastStepFragment)
+                .hide(successFragment)
                 .commit();
     }
 
@@ -138,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .beginTransaction()
                 .hide(secondStepFragment)
                 .hide(lastStepFragment)
+                .hide(successFragment)
                 .commit();
 
         if(fragmentManager.findFragmentByTag(FIRST_FRAGMENT_TAG) == null)
@@ -159,6 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .beginTransaction()
                 .hide(defaultFragment)
                 .hide(lastStepFragment)
+                .hide(successFragment)
                 .commit();
 
         if(fragmentManager.findFragmentByTag(SECOND_FRAGMENT_TAG) == null)
@@ -180,6 +187,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .beginTransaction()
                 .hide(defaultFragment)
                 .hide(secondStepFragment)
+                .hide(successFragment)
                 .commit();
 
         if(fragmentManager.findFragmentByTag(LAST_FRAGMENT_TAG) == null)
@@ -192,6 +200,28 @@ public class RegisterActivity extends AppCompatActivity {
         fragmentManager
                 .beginTransaction()
                 .show(lastStepFragment)
+                .commit();
+    }
+
+    private void switchToSuccessFragment()
+    {
+        fragmentManager
+                .beginTransaction()
+                .hide(defaultFragment)
+                .hide(secondStepFragment)
+                .hide(lastStepFragment)
+                .commit();
+
+        if(fragmentManager.findFragmentByTag(SUCCESS_FRAGMENT_TAG) == null)
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.register_fragment_container, successFragment, SUCCESS_FRAGMENT_TAG)
+                    .setReorderingAllowed(true)
+                    .commit();
+
+        fragmentManager
+                .beginTransaction()
+                .show(successFragment)
                 .commit();
     }
 }
