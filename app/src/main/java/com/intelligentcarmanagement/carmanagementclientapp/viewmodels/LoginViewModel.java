@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ErrorResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ValidationErrorResponse;
-import com.intelligentcarmanagement.carmanagementclientapp.api.login.ILoginResponse;
+import com.intelligentcarmanagement.carmanagementclientapp.api.account.ILoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.IGetUser;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginRequest;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginResponse;
@@ -20,7 +20,7 @@ import com.intelligentcarmanagement.carmanagementclientapp.repositories.accounts
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.users.IUsersRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.users.UsersRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.JwtParser;
-import com.intelligentcarmanagement.carmanagementclientapp.utils.LoginState;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.SessionManager;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class LoginViewModel extends AndroidViewModel {
     private static final String TAG = "LoginViewModel";
 
-    private MutableLiveData<LoginState> mLoginStateMutableData = new MutableLiveData<>();
+    private MutableLiveData<RequestState> mLoginStateMutableData = new MutableLiveData<>();
     private MutableLiveData<String> mLoginErrorMutableData = new MutableLiveData<>();
     private String token;
 
@@ -47,7 +47,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void login(String email, String password)
     {
-        mLoginStateMutableData.setValue(LoginState.START);
+        mLoginStateMutableData.setValue(RequestState.START);
         Log.d("ViewModel", "Login State: " + mLoginStateMutableData.getValue());
 
         // Make a login request to the API to obtain a token
@@ -58,7 +58,7 @@ public class LoginViewModel extends AndroidViewModel {
                 try {
                     token = loginResponse.getToken();
                     if(token == null) {
-                        mLoginStateMutableData.setValue(LoginState.ERROR);
+                        mLoginStateMutableData.setValue(RequestState.ERROR);
                         mLoginErrorMutableData.postValue("Server error. Please try again.");
 
                         return;
@@ -78,26 +78,26 @@ public class LoginViewModel extends AndroidViewModel {
                     fetchUser(claims.get("email").toString());
                 } catch (Exception e) {
                     mLoginErrorMutableData.postValue("Server error: " + e.getMessage());
-                    mLoginStateMutableData.setValue(LoginState.ERROR);
+                    mLoginStateMutableData.setValue(RequestState.ERROR);
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                mLoginStateMutableData.setValue(LoginState.ERROR);
+                mLoginStateMutableData.setValue(RequestState.ERROR);
                 mLoginErrorMutableData.postValue("Server error: " + t.getMessage());
             }
 
             @Override
             public void onServerValidationFailure(ValidationErrorResponse errorValidationResponse) {
-                mLoginStateMutableData.setValue(LoginState.ERROR);
+                mLoginStateMutableData.setValue(RequestState.ERROR);
                 mLoginErrorMutableData.postValue("Server error: " + errorValidationResponse.getErrors().values());
             }
 
             @Override
             public void onServerFailure(ErrorResponse serverErrorResponse) {
-                mLoginStateMutableData.setValue(LoginState.ERROR);
+                mLoginStateMutableData.setValue(RequestState.ERROR);
                 mLoginErrorMutableData.postValue("Server error: " + serverErrorResponse.getMessage());
             }
         });
@@ -109,19 +109,19 @@ public class LoginViewModel extends AndroidViewModel {
             @Override
             public void onResponse(User userResponse) {
                 sessionManager.addUserAvatar(userResponse.getAvatar());
-                mLoginStateMutableData.setValue(LoginState.SUCCESS);
+                mLoginStateMutableData.setValue(RequestState.SUCCESS);
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.d("LoginViewModel", "Response user: " + t.getMessage());
-                mLoginStateMutableData.setValue(LoginState.ERROR);
+                mLoginStateMutableData.setValue(RequestState.ERROR);
                 mLoginErrorMutableData.postValue("Server error: " + t.getMessage());
             }
         });
     }
 
-    public LiveData<LoginState> getLoginState()
+    public LiveData<RequestState> getLoginState()
     {
         return mLoginStateMutableData;
     }

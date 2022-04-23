@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
@@ -21,8 +22,9 @@ import com.intelligentcarmanagement.carmanagementclientapp.R;
 public class RegisterLastStepFragment extends Fragment {
     private static final String TAG = "RegisterLastFragment";
 
-    private TextInputLayout mPhoneNumberLayout;
+    private CircularProgressIndicator mProgressIndicator;
 
+    private TextInputLayout mPhoneNumberLayout;
     private TextInputEditText mPhoneNumberText;
 
     private Button mSubmitButton, mBackButton;
@@ -37,6 +39,7 @@ public class RegisterLastStepFragment extends Fragment {
 
         mPhoneNumberLayout = view.findViewById(R.id.last_fragment_phone_number_layout);
         mPhoneNumberText =  view.findViewById(R.id.last_fragment_phone_number);
+        mProgressIndicator = view.findViewById(R.id.last_fragment_progress_indicator);
         mSubmitButton = view.findViewById(R.id.last_fragment_submit_button);
         mBackButton = view.findViewById(R.id.last_fragment_back_button);
 
@@ -99,5 +102,16 @@ public class RegisterLastStepFragment extends Fragment {
     protected Button getBackButton()
     {
         return mBackButton;
+    }
+
+    protected String getPhoneNumber()
+    {
+        return mPhoneNumberText.getText().toString();
+    }
+
+    protected void setProgressBarEnabled(boolean state)
+    {
+        int visibility = state ? View.VISIBLE : View.GONE;
+        mProgressIndicator.setVisibility(visibility);
     }
 }

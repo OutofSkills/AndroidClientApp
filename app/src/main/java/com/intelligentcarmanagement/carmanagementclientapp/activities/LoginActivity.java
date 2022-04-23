@@ -15,7 +15,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
-import com.intelligentcarmanagement.carmanagementclientapp.utils.LoginState;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.ValidationTextWatcher;
 import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.LoginViewModel;
 
@@ -74,9 +74,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mViewModel.getLoginState().observe(this, new Observer<LoginState>() {
+        mViewModel.getLoginState().observe(this, new Observer<RequestState>() {
             @Override
-            public void onChanged(LoginState state) {
+            public void onChanged(RequestState state) {
                 Log.d(TAG, "Login state: " + state);
                 switch (state) {
                     case START:

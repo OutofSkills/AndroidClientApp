@@ -1,4 +1,4 @@
-package com.intelligentcarmanagement.carmanagementclientapp.api.login;
+package com.intelligentcarmanagement.carmanagementclientapp.api.account;
 
 import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginRequest;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginResponse;

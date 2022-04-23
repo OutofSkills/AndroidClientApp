@@ -1,6 +1,8 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,6 +26,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.ImageConverter;
 
 /**
  */
@@ -158,6 +161,21 @@ public class RegisterFirstStepFragment extends Fragment {
     protected Button getNextButton()
     {
         return mNextButton;
+    }
+
+    protected String getFirstName(){
+        return mFirstNameText.getText().toString();
+    }
+
+    protected String getLastName(){
+        return mLastNameText.getText().toString();
+    }
+
+    protected String getAvatar(){
+        Bitmap bitmap = ((BitmapDrawable)mUserAvatar.getDrawable()).getBitmap();
+        byte[] imageBytes = ImageConverter.convertBitmapToBytes(bitmap);
+
+        return ImageConverter.convertBytesToBase64(imageBytes);
     }
 
     // Create an intent to open gallery window

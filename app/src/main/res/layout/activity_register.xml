@@ -34,7 +34,6 @@
             android:textSize="16dp"
             android:textColor="@color/darker_grey"
             />
-
     </RelativeLayout>
 
     <!--Registration step by step container-->
@@ -42,8 +41,21 @@
         android:id="@+id/register_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/registerTopBg"
-        android:layout_above="@id/bottomRedirectLayout"/>
+        android:layout_below="@id/registerTopBg"/>
+
+    <TextView
+        android:id="@+id/register_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/quantum_error_light"
+        android:drawableLeft="@drawable/ic_baseline_square_24"
+        android:drawableTint="@color/quantum_error_light"
+        android:layout_below="@+id/register_fragment_container"
+        android:visibility="gone"/>
+
 
     <RelativeLayout
         android:id="@+id/bottomRedirectLayout"

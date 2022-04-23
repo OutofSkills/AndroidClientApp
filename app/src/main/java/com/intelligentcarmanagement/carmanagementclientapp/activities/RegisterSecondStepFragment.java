@@ -225,4 +225,24 @@ public class RegisterSecondStepFragment extends Fragment {
     {
         return mBackButton;
     }
+
+    protected String getUsername()
+    {
+        return mUsernameText.getText().toString();
+    }
+
+    protected String getEmail()
+    {
+        return mEmailText.getText().toString();
+    }
+
+    protected String getPassword()
+    {
+        return mPasswordText.getText().toString();
+    }
+
+    protected String getConfirmPassword()
+    {
+        return mConfirmPasswordText.getText().toString();
+    }
 }

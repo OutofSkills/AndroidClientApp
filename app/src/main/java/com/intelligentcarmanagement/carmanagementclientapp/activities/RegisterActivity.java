@@ -1,18 +1,21 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.intelligentcarmanagement.carmanagementclientapp.R;
-
-import java.util.List;
+import com.intelligentcarmanagement.carmanagementclientapp.models.RegisterRequest;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
+import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.RegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
@@ -25,6 +28,9 @@ public class RegisterActivity extends AppCompatActivity {
     // Redirect button to login
     private Button loginButtonRedirect;
 
+    // Error message
+    private TextView registerErrorTextView;
+
     private RegisterFirstStepFragment defaultFragment;
     private RegisterSecondStepFragment secondStepFragment;
     private RegisterLastStepFragment lastStepFragment;
@@ -32,12 +38,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
 
+    // New user object
+    private RegisterRequest user = new RegisterRequest();
+
+    private RegisterViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         loginButtonRedirect = findViewById(R.id.register_redirect_to_login);
+        registerErrorTextView = findViewById(R.id.register_error_message);
+
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -75,7 +89,13 @@ public class RegisterActivity extends AppCompatActivity {
             defaultFragment.getNextButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: Click");
+                    Log.d(TAG, "onClick: Avatar: " + defaultFragment.getAvatar());
+                    Log.d(TAG, "onClick: Names: " + defaultFragment.getFirstName() + " " + defaultFragment.getLastName());
+
+                    user.setAvatar(defaultFragment.getAvatar());
+                    user.setFirstName(defaultFragment.getFirstName());
+                    user.setLastName(defaultFragment.getLastName());
+
                     switchToSecondFragment();
                 }
             });
@@ -84,7 +104,14 @@ public class RegisterActivity extends AppCompatActivity {
             secondStepFragment.getNextButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: Click");
+                    Log.d(TAG, "onClick: Click" + secondStepFragment.getUsername() + " " + secondStepFragment.getEmail() + " " +  secondStepFragment.getPassword() + " "
+                            + secondStepFragment.getConfirmPassword());
+
+                    user.setUserName(secondStepFragment.getUsername());
+                    user.setEmail(secondStepFragment.getEmail());
+                    user.setPassword(secondStepFragment.getPassword());
+                    user.setConfirmPassword(secondStepFragment.getConfirmPassword());
+
                     switchToLastFragment();
                 }
             });
@@ -111,8 +138,40 @@ public class RegisterActivity extends AppCompatActivity {
             lastStepFragment.getSubmitButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: Click");
-                    switchToSuccessFragment();
+                    Log.d(TAG, "onClick: Data: " + lastStepFragment.getPhoneNumber());
+
+                    user.setPhoneNumber(lastStepFragment.getPhoneNumber());
+
+                    // Submit the register data
+                    viewModel.register(user);
+                    viewModel.getRegisterState().observe(RegisterActivity.this, new Observer<RequestState>() {
+                        @Override
+                        public void onChanged(RequestState requestState) {
+                            switch (requestState){
+                                case START:
+                                    lastStepFragment.setProgressBarEnabled(true);
+                                    lastStepFragment.getSubmitButton().setEnabled(false);
+                                    registerErrorTextView.setVisibility(View.GONE);
+                                    break;
+                                case SUCCESS:
+                                    lastStepFragment.setProgressBarEnabled(false);
+                                    registerErrorTextView.setVisibility(View.GONE);
+                                    switchToSuccessFragment();
+                                    break;
+                                case ERROR:
+                                    lastStepFragment.setProgressBarEnabled(false);
+                                    lastStepFragment.getSubmitButton().setEnabled(true);
+                                    viewModel.getRegisterError().observe(RegisterActivity.this, new Observer<String>() {
+                                        @Override
+                                        public void onChanged(String s) {
+                                            registerErrorTextView.setVisibility(View.VISIBLE);
+                                            registerErrorTextView.setText(s);
+                                        }
+                                    });
+                                    break;
+                            }
+                        }
+                    });
                 }
             });
     }
