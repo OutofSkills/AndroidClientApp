@@ -34,11 +34,11 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.historyRideId.setText("#" + String.valueOf(mRides.get(position).getRideId()));
-        holder.historyRideDate.setText(String.format("%1$tY-%1$tm-%1$td", mRides.get(position).getDate()));
+        holder.historyRideId.setText("#" + String.valueOf(mRides.get(position).getId()));
+        holder.historyRideDate.setText(String.format("%1$tY-%1$tm-%1$td", mRides.get(position).getPickUpTime()));
         holder.historyRidePickUpCity.setText(mRides.get(position).getPickUpPlaceName());
         holder.historyRideDestinationCity.setText(mRides.get(position).getDestinationPlaceName());
-        holder.historyRideDistance.setText(String.format("%.2f", mRides.get(position).getRideDistance()) + "km");
+        holder.historyRideDistance.setText(String.format("%.2f", mRides.get(position).getDistance()) + "km");
     }
 
     @Override

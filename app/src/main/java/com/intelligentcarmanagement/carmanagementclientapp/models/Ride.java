@@ -4,60 +4,68 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Ride implements Serializable {
-    private int rideId;
+    private int id;
     private int driverId;
+    private int clientId;
     private String pickUpPlaceAddress;
     private String pickUpPlaceName;
     private String destinationPlaceAddress;
     private String destinationPlaceName;
-    private String pickUpLat;
-    private String pickUpLng;
-    private String destinationLat;
-    private String destinationLng;
-    private double rideDistance;
+    private String pickUpPlaceLat;
+    private String pickUpPlaceLong;
+    private String destinationPlaceLat;
+    private String destinationPlaceLong;
+    private double distance;
     private double averageTime;
-    private Date date;
+    private Date pickUpTime;
 
     public Ride() {
     }
 
     public Ride(int rideId, int driverId, String pickUpPlaceAddress, String pickUpPlaceName, String destinationPlaceAddress, String destinationPlaceName, String pickUpLat, String pickUpLng, String destinationLat, String destinationLng, double rideDistance, Date date) {
-        this.rideId = rideId;
+        this.id = rideId;
         this.driverId = driverId;
         this.pickUpPlaceAddress = pickUpPlaceAddress;
         this.pickUpPlaceName = pickUpPlaceName;
         this.destinationPlaceAddress = destinationPlaceAddress;
         this.destinationPlaceName = destinationPlaceName;
-        this.pickUpLat = pickUpLat;
-        this.pickUpLng = pickUpLng;
-        this.destinationLat = destinationLat;
-        this.destinationLng = destinationLng;
-        this.rideDistance = rideDistance;
-        this.date = date;
+        this.pickUpPlaceLat = pickUpLat;
+        this.pickUpPlaceLong = pickUpLng;
+        this.destinationPlaceLat = destinationLat;
+        this.destinationPlaceLong = destinationLng;
+        this.distance = rideDistance;
+        this.pickUpTime = date;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public double getAverageTime() {
         return averageTime;
     }
 
-    public void setAverageTime(double averageTime) {
-        this.averageTime = averageTime;
+    public double getDistance() {
+        return distance;
     }
 
-    public double getRideDistance() {
-        return rideDistance;
+    public void setDistance(double distance) {
+        double averageSpeed = 40; // Km/h
+
+        this.distance = distance;
+        this.averageTime = distance /averageSpeed;
     }
 
-    public void setRideDistance(double rideDistance) {
-        this.rideDistance = rideDistance;
+    public int getId() {
+        return id;
     }
 
-    public int getRideId() {
-        return rideId;
-    }
-
-    public void setRideId(int rideId) {
-        this.rideId = rideId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPickUpPlaceName() {
@@ -76,12 +84,12 @@ public class Ride implements Serializable {
         this.destinationPlaceName = destinationPlaceName;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getPickUpTime() {
+        return pickUpTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPickUpTime(Date pickUpTime) {
+        this.pickUpTime = pickUpTime;
     }
 
     public int getDriverId() {
@@ -109,34 +117,34 @@ public class Ride implements Serializable {
     }
 
     public String getPickUpLat() {
-        return pickUpLat;
+        return pickUpPlaceLat;
     }
 
     public void setPickUpLat(String pickUpLat) {
-        this.pickUpLat = pickUpLat;
+        this.pickUpPlaceLat = pickUpLat;
     }
 
-    public String getPickUpLng() {
-        return pickUpLng;
+    public String getPickUpPlaceLong() {
+        return pickUpPlaceLong;
     }
 
-    public void setPickUpLng(String pickUpLng) {
-        this.pickUpLng = pickUpLng;
+    public void setPickUpPlaceLong(String pickUpPlaceLong) {
+        this.pickUpPlaceLong = pickUpPlaceLong;
     }
 
-    public String getDestinationLat() {
-        return destinationLat;
+    public String getDestinationPlaceLat() {
+        return destinationPlaceLat;
     }
 
-    public void setDestinationLat(String destinationLat) {
-        this.destinationLat = destinationLat;
+    public void setDestinationPlaceLat(String destinationPlaceLat) {
+        this.destinationPlaceLat = destinationPlaceLat;
     }
 
-    public String getDestinationLng() {
-        return destinationLng;
+    public String getDestinationPlaceLong() {
+        return destinationPlaceLong;
     }
 
-    public void setDestinationLng(String destinationLng) {
-        this.destinationLng = destinationLng;
+    public void setDestinationPlaceLong(String destinationPlaceLong) {
+        this.destinationPlaceLong = destinationPlaceLong;
     }
 }

@@ -1,5 +1,7 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,16 +17,25 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.adapters.AvailableDriversRecyclerViewAdapter;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityAvailableDriversBinding;
+import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.AvailableDriversViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AvailableDriversActivity extends DrawerBaseActivity {
+    private static final String TAG = "AvailableDriversActivity";
 
+    // Binding
     ActivityAvailableDriversBinding availableDriversBinding;
+
+    // View model
+    private AvailableDriversViewModel mViewModel;
 
     // Ride request data
     private Ride ride;
+
     // Buttons
     Button availableDriversBackButton, availableDriversFilterButton;
 
@@ -49,27 +60,22 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
         allocateActivityTitle("Available Drivers");
 
         availableDriversBackButton = findViewById(R.id.availableDriversBackButton);
-        availableDriversBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         availableDriversFilterButton = findViewById(R.id.driversFilterButton);
-        availableDriversFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FilterDialogOpen();
-            }
-        });
 
         // Get the intent data
         ride = (Ride) getIntent().getSerializableExtra("RideRequest");
 
+        if(ride == null)
+            Log.d(TAG, "onCreate: Null ride object");
+
+        mViewModel = new ViewModelProvider(this).get(AvailableDriversViewModel.class);
+
         // Setup the recycler view
         recyclerView = findViewById(R.id.availableDriversRecyclerView);
         seedDriversData();
+
+        // Set event listeners here
+        setEventListeners();
     }
 
     private void FilterDialogOpen()
@@ -105,27 +111,39 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
                 .show();
     }
 
-    private void initRecyclerView()
+    private void initRecyclerView(List<Driver> driverList)
     {
-        adapter = new AvailableDriversRecyclerViewAdapter(this, mDriversAvatars, mDriversUsernames, mDriversRating, mDriversDistanceAway, ride);
+        adapter = new AvailableDriversRecyclerViewAdapter(this, driverList, ride);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void seedDriversData()
     {
-        Bitmap btm = BitmapFactory.decodeResource(getResources(), R.drawable.profile_pic);
-        mDriversAvatars.add(btm);
-        mDriversUsernames.add("NoobMaster");
-        mDriversRating.add("4.7");
-        mDriversDistanceAway.add(14);
+        mViewModel.fetchDrivers(true);
+        mViewModel.getDriversMutableData().observe(AvailableDriversActivity.this, new Observer<List<Driver>>() {
+            @Override
+            public void onChanged(List<Driver> driverList) {
+                initRecyclerView(driverList);
+            }
+        });
+    }
 
-        Bitmap btm1 = BitmapFactory.decodeResource(getResources(), R.drawable.spongebob);
-        mDriversAvatars.add(btm1);
-        mDriversUsernames.add("_WeirdGuy_");
-        mDriversRating.add("4.8");
-        mDriversDistanceAway.add(19);
+    private void setEventListeners() {
+        // Back home button action
+        availableDriversBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-        initRecyclerView();
+        // Filter drivers button
+        availableDriversFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FilterDialogOpen();
+            }
+        });
     }
 }

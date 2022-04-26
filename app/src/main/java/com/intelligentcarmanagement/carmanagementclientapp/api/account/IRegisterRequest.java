@@ -1,6 +1,5 @@
 package com.intelligentcarmanagement.carmanagementclientapp.api.account;
 
-import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.models.RegisterRequest;
 
 import retrofit2.Call;

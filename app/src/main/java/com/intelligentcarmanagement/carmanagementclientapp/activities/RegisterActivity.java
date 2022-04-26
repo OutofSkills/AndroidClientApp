@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +13,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.intelligentcarmanagement.carmanagementclientapp.R;
+import com.intelligentcarmanagement.carmanagementclientapp.adapters.ErrorsRecyclerViewAdapter;
 import com.intelligentcarmanagement.carmanagementclientapp.models.RegisterRequest;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
 import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.RegisterViewModel;
@@ -28,15 +32,16 @@ public class RegisterActivity extends AppCompatActivity {
     // Redirect button to login
     private Button loginButtonRedirect;
 
-    // Error message
-    private TextView registerErrorTextView;
-
     private RegisterFirstStepFragment defaultFragment;
     private RegisterSecondStepFragment secondStepFragment;
     private RegisterLastStepFragment lastStepFragment;
     private RegisterSuccessFragment successFragment;
 
     private FragmentManager fragmentManager;
+
+    // Errors recycler view
+    private RecyclerView recyclerView;
+    private ErrorsRecyclerViewAdapter adapter;
 
     // New user object
     private RegisterRequest user = new RegisterRequest();
@@ -49,12 +54,11 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         loginButtonRedirect = findViewById(R.id.register_redirect_to_login);
-        registerErrorTextView = findViewById(R.id.register_error_message);
+        recyclerView = findViewById(R.id.register_errors_recycler_view);
 
         viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         fragmentManager = getSupportFragmentManager();
-
         defaultFragment = new RegisterFirstStepFragment();
         secondStepFragment = new RegisterSecondStepFragment();
         lastStepFragment = new RegisterLastStepFragment();
@@ -151,21 +155,20 @@ public class RegisterActivity extends AppCompatActivity {
                                 case START:
                                     lastStepFragment.setProgressBarEnabled(true);
                                     lastStepFragment.getSubmitButton().setEnabled(false);
-                                    registerErrorTextView.setVisibility(View.GONE);
                                     break;
                                 case SUCCESS:
                                     lastStepFragment.setProgressBarEnabled(false);
-                                    registerErrorTextView.setVisibility(View.GONE);
                                     switchToSuccessFragment();
                                     break;
                                 case ERROR:
                                     lastStepFragment.setProgressBarEnabled(false);
                                     lastStepFragment.getSubmitButton().setEnabled(true);
-                                    viewModel.getRegisterError().observe(RegisterActivity.this, new Observer<String>() {
+                                    viewModel.getErrorsMutableLiveData().observe(RegisterActivity.this, new Observer<String[]>() {
                                         @Override
-                                        public void onChanged(String s) {
-                                            registerErrorTextView.setVisibility(View.VISIBLE);
-                                            registerErrorTextView.setText(s);
+                                        public void onChanged(String[] strings) {
+                                            adapter = new ErrorsRecyclerViewAdapter(RegisterActivity.this, strings);
+                                            recyclerView.setAdapter(adapter);
+                                            recyclerView.setLayoutManager(new LinearLayoutManager(RegisterActivity.this));
                                         }
                                     });
                                     break;

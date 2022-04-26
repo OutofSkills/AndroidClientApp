@@ -10,8 +10,8 @@ import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ErrorRespo
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ValidationErrorResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.account.ILoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.account.ILoginRequest;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginRequest;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginResponse;
+import com.intelligentcarmanagement.carmanagementclientapp.models.login.LoginRequest;
+import com.intelligentcarmanagement.carmanagementclientapp.models.login.LoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.models.RegisterRequest;
 
 import retrofit2.Call;

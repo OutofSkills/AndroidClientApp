@@ -9,7 +9,7 @@ import retrofit2.http.Header;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
-public interface IUsersRequest {
+public interface IUsersRequests {
     @GET("/api/Clients/byEmail")
     Call<User> getUserByEmail(@Header("authorization") String token, @Query("email") String email);
 

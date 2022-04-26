@@ -1,16 +1,12 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityConfirmRideRequestBinding;
-import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityProfileBinding;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
 import com.intelligentcarmanagement.carmanagementclientapp.services.NotificationsService;
 
@@ -57,7 +53,7 @@ public class ConfirmRideRequestActivity extends DrawerBaseActivity {
     {
         ridePickUpLocation.setText(ride.getPickUpPlaceName());
         rideDestination.setText(ride.getDestinationPlaceName());
-        rideDistance.setText(String.valueOf(ride.getRideDistance()) + " km");
+        rideDistance.setText(String.valueOf(ride.getDistance()) + " km");
         rideAvgTime.setText(String.valueOf(ride.getAverageTime()) + " min");
     }
 

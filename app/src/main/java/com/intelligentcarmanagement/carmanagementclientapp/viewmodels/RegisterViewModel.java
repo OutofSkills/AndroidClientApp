@@ -16,11 +16,14 @@ import com.intelligentcarmanagement.carmanagementclientapp.repositories.accounts
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.accounts.IAccountsRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RegisterViewModel extends AndroidViewModel {
     private static final String TAG = "RegisterViewModel";
 
     private MutableLiveData<RequestState> mRegisterStateMutableData = new MutableLiveData<>();
-    private MutableLiveData<String> mRegisterErrorMutableData = new MutableLiveData<>();
+    MutableLiveData<String[]> mErrorsMutableLiveData = new MutableLiveData<>();
 
     private IAccountsRepository mAccountsRepository;
 
@@ -43,21 +46,27 @@ public class RegisterViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Throwable t) {
-                mRegisterErrorMutableData.postValue(t.toString());
+                mErrorsMutableLiveData.postValue(new String[]{t.getMessage()});
                 mRegisterStateMutableData.setValue(RequestState.ERROR);
                 Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
             }
 
             @Override
             public void onServerValidationFailure(ValidationErrorResponse errorValidationResponse) {
-                mRegisterErrorMutableData.postValue(errorValidationResponse.getErrors().toString());
+                List<String> validationErrors = new ArrayList<>();
+                for (String[] array: errorValidationResponse.getErrors().values()) {
+                    for (String string: array) {
+                        validationErrors.add(string);
+                    }
+                }
+                mErrorsMutableLiveData.postValue(validationErrors.toArray(new String[0]));
                 mRegisterStateMutableData.setValue(RequestState.ERROR);
                 Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
             }
 
             @Override
             public void onServerFailure(ErrorResponse serverErrorResponse) {
-                mRegisterErrorMutableData.postValue(serverErrorResponse.getMessage());
+                mErrorsMutableLiveData.postValue(new String[]{serverErrorResponse.getMessage()});
                 mRegisterStateMutableData.setValue(RequestState.ERROR);
                 Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
             }
@@ -68,7 +77,7 @@ public class RegisterViewModel extends AndroidViewModel {
         return mRegisterStateMutableData;
     }
 
-    public LiveData<String> getRegisterError(){
-        return mRegisterErrorMutableData;
+    public LiveData<String[]> getErrorsMutableLiveData(){
+        return mErrorsMutableLiveData;
     }
 }

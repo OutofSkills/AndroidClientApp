@@ -12,8 +12,8 @@ import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ErrorRespo
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ValidationErrorResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.account.ILoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.IGetUser;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginRequest;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Login.LoginResponse;
+import com.intelligentcarmanagement.carmanagementclientapp.models.login.LoginRequest;
+import com.intelligentcarmanagement.carmanagementclientapp.models.login.LoginResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.models.User;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.accounts.AccountsRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.accounts.IAccountsRepository;

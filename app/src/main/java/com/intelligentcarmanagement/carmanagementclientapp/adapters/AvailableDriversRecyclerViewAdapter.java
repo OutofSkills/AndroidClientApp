@@ -17,25 +17,22 @@ import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.activities.AvailableDriversActivity;
 import com.intelligentcarmanagement.carmanagementclientapp.activities.ConfirmRideRequestActivity;
 import com.intelligentcarmanagement.carmanagementclientapp.activities.HomeActivity;
+import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.ImageConverter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<AvailableDriversRecyclerViewAdapter.ViewHolder>{
     Context mContext;
-    ArrayList<Bitmap> mDriversAvatars = new ArrayList<>();
-    ArrayList<String> mDriversUsernames = new ArrayList<>();
-    ArrayList<String> mDriversRating = new ArrayList<>();
-    ArrayList<Integer> mDriversDistanceAway = new ArrayList<>();
+    List<Driver> mDrivers = new ArrayList<>();
 
     // Ride partial data
     Ride mRide;
 
-    public AvailableDriversRecyclerViewAdapter(Context mContext, ArrayList<Bitmap> mDriversAvatars, ArrayList<String> mDriversUsernames, ArrayList<String> mDriversRating, ArrayList<Integer> mDriversDistanceAway, Ride ride) {
-        this.mDriversAvatars = mDriversAvatars;
-        this.mDriversUsernames = mDriversUsernames;
-        this.mDriversRating = mDriversRating;
-        this.mDriversDistanceAway = mDriversDistanceAway;
+    public AvailableDriversRecyclerViewAdapter(Context mContext, List<Driver> driverList, Ride ride) {
+        this.mDrivers = driverList;
         this.mContext = mContext;
         mRide = ride;
     }
@@ -50,10 +47,14 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.driverAvatar.setImageBitmap(mDriversAvatars.get(position));
-        holder.driverUsername.setText(mDriversUsernames.get(position));
-        holder.driverRating.setText(mDriversRating.get(position));
-        holder.driverDistanceAway.setText(mDriversDistanceAway.get(position).toString() + "km away");
+        String base64Image = mDrivers.get(position).getAvatar();
+        byte[] imageBytes = ImageConverter.convertBase64ToBytes(base64Image);
+        Bitmap bitmap = ImageConverter.convertBytesToBitmap(imageBytes);
+
+        holder.driverAvatar.setImageBitmap(bitmap);
+        holder.driverUsername.setText(mDrivers.get(position).getUserName());
+        holder.driverRating.setText(String.valueOf(mDrivers.get(position).getRating()));
+        holder.driverDistanceAway.setText("TODO km");
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +71,7 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
 
     @Override
     public int getItemCount() {
-        return mDriversUsernames.size();
+        return mDrivers.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

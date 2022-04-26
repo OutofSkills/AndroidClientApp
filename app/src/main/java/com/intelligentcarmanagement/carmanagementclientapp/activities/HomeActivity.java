@@ -297,7 +297,7 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
         ride.setPickUpPlaceName(place.getName());
         ride.setPickUpPlaceAddress(place.getAddress());
         ride.setPickUpLat(String.valueOf(place.getLatLng().latitude));
-        ride.setPickUpLng(String.valueOf(place.getLatLng().longitude));
+        ride.setPickUpPlaceLong(String.valueOf(place.getLatLng().longitude));
         pickUpEditText.setText(place.getName());
         pickUpRequest = false;
 
@@ -306,12 +306,10 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
         if(!destinationEditText.getText().toString().matches(""))
         {
             submitRideRequest.setEnabled(true);
-            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
-                    new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpPlaceLong())),
+                    new LatLng(Double.valueOf(ride.getDestinationPlaceLat()), Double.valueOf(ride.getDestinationPlaceLong())));
             // TODO: Calculate the distance between the 2 points
-            ride.setRideDistance(10.21);
-            // TODO: Calculate the average driving time
-            ride.setAverageTime(20.24);
+            ride.setDistance(10.21);
         }
         else
         {
@@ -325,8 +323,8 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     {
         ride.setDestinationPlaceName(place.getName());
         ride.setDestinationPlaceAddress(place.getAddress());
-        ride.setDestinationLat(String.valueOf(place.getLatLng().latitude));
-        ride.setDestinationLng(String.valueOf(place.getLatLng().longitude));
+        ride.setDestinationPlaceLat(String.valueOf(place.getLatLng().latitude));
+        ride.setDestinationPlaceLong(String.valueOf(place.getLatLng().longitude));
         destinationEditText.setText(place.getName());
         destinationRequest = false;
 
@@ -335,12 +333,10 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
         if(!pickUpEditText.getText().toString().matches(""))
         {
             submitRideRequest.setEnabled(true);
-            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpLng())),
-                    new LatLng(Double.valueOf(ride.getDestinationLat()), Double.valueOf(ride.getDestinationLng())));
+            drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpPlaceLong())),
+                    new LatLng(Double.valueOf(ride.getDestinationPlaceLat()), Double.valueOf(ride.getDestinationPlaceLong())));
             // TODO: Calculate the distance between the 2 points
-            ride.setRideDistance(12.21);
-            // TODO: Calculate the average driving time
-            ride.setAverageTime(20.20);
+            ride.setDistance(12.21);
         }
         else
         {

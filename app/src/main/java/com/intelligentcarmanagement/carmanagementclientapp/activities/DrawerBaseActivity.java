@@ -87,6 +87,7 @@ public class DrawerBaseActivity extends AppCompatActivity implements NavigationV
                 overridePendingTransition(0, 0);
                 break;
             case R.id.nav_sign_out:
+                drawerViewModel.logout();
                 startActivity(new Intent(this, LoginActivity.class));
                 overridePendingTransition(0, 0);
                 break;

@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.intelligentcarmanagement.carmanagementclientapp.api.RetrofitService;
-import com.intelligentcarmanagement.carmanagementclientapp.api.users.IUsersRequest;
+import com.intelligentcarmanagement.carmanagementclientapp.api.users.IUsersRequests;
 import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.IGetUser;
 import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.IUpdateUser;
 import com.intelligentcarmanagement.carmanagementclientapp.models.User;
@@ -19,7 +19,7 @@ public class UsersRepository implements IUsersRepository{
     private static final String TAG = "UsersRepository";
 
     public void getByEmail(String token, String email, IGetUser getUserResponse) {
-        IUsersRequest usersService = RetrofitService.getRetrofit().create(IUsersRequest.class);
+        IUsersRequests usersService = RetrofitService.getRetrofit().create(IUsersRequests.class);
         Call<User> initRequest = usersService.getUserByEmail(token, email);
 
         initRequest.enqueue(new Callback<User>() {
@@ -47,7 +47,7 @@ public class UsersRepository implements IUsersRepository{
 
     public void update(String token, int id, User user, IUpdateUser updateUserResponse)
     {
-        IUsersRequest usersService = RetrofitService.getRetrofit().create(IUsersRequest.class);
+        IUsersRequests usersService = RetrofitService.getRetrofit().create(IUsersRequests.class);
         Call<User> initRequest = usersService.updateUser(token, id, user);
 
         initRequest.enqueue(new Callback<User>() {
