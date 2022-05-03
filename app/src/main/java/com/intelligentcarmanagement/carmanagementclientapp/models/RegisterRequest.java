@@ -19,10 +19,12 @@ public class RegisterRequest {
     private String password;
     @SerializedName("confirmPassword")
     private String confirmPassword;
+    @SerializedName("notificationsToken")
+    private String notificationsToken;
 
     public RegisterRequest(){}
 
-    public RegisterRequest(String firstName, String lastName, String phoneNumber, String avatar, String email, String userName, String password, String confirmPassword) {
+    public RegisterRequest(String firstName, String lastName, String phoneNumber, String avatar, String email, String userName, String password, String confirmPassword, String notificationsToken) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -31,6 +33,15 @@ public class RegisterRequest {
         this.userName = userName;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.notificationsToken = notificationsToken;
+    }
+
+    public String getNotificationsToken() {
+        return notificationsToken;
+    }
+
+    public void setNotificationsToken(String notificationsToken) {
+        this.notificationsToken = notificationsToken;
     }
 
     public String getFirstName() {

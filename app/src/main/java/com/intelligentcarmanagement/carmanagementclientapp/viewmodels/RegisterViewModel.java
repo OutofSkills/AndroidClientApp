@@ -8,6 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.api.account.IRegisterResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ErrorResponse;
 import com.intelligentcarmanagement.carmanagementclientapp.api.errors.ValidationErrorResponse;
@@ -37,40 +41,56 @@ public class RegisterViewModel extends AndroidViewModel {
         mRegisterStateMutableData.setValue(RequestState.START);
         Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
 
-        mAccountsRepository.register(registerRequest, new IRegisterResponse() {
-            @Override
-            public void onResponse(RegisterRequest request) {
-                mRegisterStateMutableData.setValue(RequestState.SUCCESS);
-                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
-            }
+        // Get the device's notifications token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
 
-            @Override
-            public void onFailure(Throwable t) {
-                mErrorsMutableLiveData.postValue(new String[]{t.getMessage()});
-                mRegisterStateMutableData.setValue(RequestState.ERROR);
-                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
-            }
+                        // Get new FCM registration token
+                        registerRequest.setNotificationsToken(task.getResult());
 
-            @Override
-            public void onServerValidationFailure(ValidationErrorResponse errorValidationResponse) {
-                List<String> validationErrors = new ArrayList<>();
-                for (String[] array: errorValidationResponse.getErrors().values()) {
-                    for (String string: array) {
-                        validationErrors.add(string);
+                        // Send the request
+                        mAccountsRepository.register(registerRequest, new IRegisterResponse() {
+                            @Override
+                            public void onResponse(RegisterRequest request) {
+                                mRegisterStateMutableData.setValue(RequestState.SUCCESS);
+                                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+                                mErrorsMutableLiveData.postValue(new String[]{t.getMessage()});
+                                mRegisterStateMutableData.setValue(RequestState.ERROR);
+                                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
+                            }
+
+                            @Override
+                            public void onServerValidationFailure(ValidationErrorResponse errorValidationResponse) {
+                                List<String> validationErrors = new ArrayList<>();
+                                for (String[] array: errorValidationResponse.getErrors().values()) {
+                                    for (String string: array) {
+                                        validationErrors.add(string);
+                                    }
+                                }
+                                mErrorsMutableLiveData.postValue(validationErrors.toArray(new String[0]));
+                                mRegisterStateMutableData.setValue(RequestState.ERROR);
+                                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
+                            }
+
+                            @Override
+                            public void onServerFailure(ErrorResponse serverErrorResponse) {
+                                mErrorsMutableLiveData.postValue(new String[]{serverErrorResponse.getMessage()});
+                                mRegisterStateMutableData.setValue(RequestState.ERROR);
+                                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
+                            }
+                        });
                     }
-                }
-                mErrorsMutableLiveData.postValue(validationErrors.toArray(new String[0]));
-                mRegisterStateMutableData.setValue(RequestState.ERROR);
-                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
-            }
-
-            @Override
-            public void onServerFailure(ErrorResponse serverErrorResponse) {
-                mErrorsMutableLiveData.postValue(new String[]{serverErrorResponse.getMessage()});
-                mRegisterStateMutableData.setValue(RequestState.ERROR);
-                Log.d("ViewModel", "Register State: " + mRegisterStateMutableData.getValue());
-            }
-        });
+                });
     }
 
     public LiveData<RequestState> getRegisterState() {

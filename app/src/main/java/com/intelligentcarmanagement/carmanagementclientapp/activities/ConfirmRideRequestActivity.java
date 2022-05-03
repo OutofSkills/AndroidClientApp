@@ -8,13 +8,13 @@ import android.widget.TextView;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityConfirmRideRequestBinding;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
-import com.intelligentcarmanagement.carmanagementclientapp.services.NotificationsService;
+import com.intelligentcarmanagement.carmanagementclientapp.services.NotificationsManager;
 
 public class ConfirmRideRequestActivity extends DrawerBaseActivity {
 
     ActivityConfirmRideRequestBinding confirmRideRequestBinding;
 
-    private NotificationsService mNotificationService;
+    private NotificationsManager mNotificationService;
     // Ride request complete data
     private Ride ride;
 
@@ -63,7 +63,7 @@ public class ConfirmRideRequestActivity extends DrawerBaseActivity {
             @Override
             public void onClick(View view) {
                 //TODO: handle confirm ride request
-                mNotificationService = new NotificationsService(ConfirmRideRequestActivity.this);
+                mNotificationService = new NotificationsManager(ConfirmRideRequestActivity.this);
                 mNotificationService.displayNotification("Driver Confirmation", "Driver " + "Johnny" +" confirmed your request.");
             }
         });

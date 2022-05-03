@@ -13,7 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 
-public class NotificationsService {
+public class NotificationsManager {
 
     private static final String CHANNEL_ID  = "Car_Management";
     private static final String CHANNEL_NAME  = "Client Notification";
@@ -21,7 +21,7 @@ public class NotificationsService {
 
     private Context mContext;
 
-    public NotificationsService(Context context)
+    public NotificationsManager(Context context)
     {
         mContext = context;
         // Create notifications channel if needed
