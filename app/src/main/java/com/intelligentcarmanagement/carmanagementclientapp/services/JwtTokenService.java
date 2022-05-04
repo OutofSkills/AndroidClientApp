@@ -7,7 +7,7 @@ import com.intelligentcarmanagement.carmanagementclientapp.utils.JwtParser;
 
 import java.util.Map;
 
-public class TokenService {
+public class JwtTokenService {
     public Map<Object, Object> decodePayloadClaims(String token)
     {
         Map<Object, Object> claims = null;
@@ -16,7 +16,7 @@ public class TokenService {
             claims = getClaims(decodedPayload);
         }catch (Exception e)
         {
-            Log.d("TokenService", "Payload decode error: " + e.getMessage());
+            Log.d("JwtTokenService", "Payload decode error: " + e.getMessage());
         }
         return claims;
     }

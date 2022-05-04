@@ -27,7 +27,7 @@ public class ProfileViewModel extends AndroidViewModel {
         mUsersRepository = new UsersRepository();
         sessionManager = new SessionManager(application);
 
-        token = sessionManager.getUserData().get(sessionManager.KEY_TOKEN);
+        token = sessionManager.getUserData().get(sessionManager.KEY_JWT_TOKEN);
     }
 
     public void fetchUser(){

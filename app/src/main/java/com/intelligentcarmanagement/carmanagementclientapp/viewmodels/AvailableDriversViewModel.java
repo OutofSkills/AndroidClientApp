@@ -8,9 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.intelligentcarmanagement.carmanagementclientapp.api.drivers.IGetDrivers;
-import com.intelligentcarmanagement.carmanagementclientapp.api.users.responses.IGetUser;
 import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
-import com.intelligentcarmanagement.carmanagementclientapp.models.User;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.drivers.DriversRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.drivers.IDriversRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.SessionManager;
@@ -29,7 +27,7 @@ public class AvailableDriversViewModel extends AndroidViewModel {
         super(application);
         mDriversRepository = new DriversRepository();
         mSessionManager = new SessionManager(application);
-        token = mSessionManager.getUserData().get(mSessionManager.KEY_TOKEN);
+        token = mSessionManager.getUserData().get(mSessionManager.KEY_JWT_TOKEN);
     }
 
     public void fetchDrivers(boolean availability){

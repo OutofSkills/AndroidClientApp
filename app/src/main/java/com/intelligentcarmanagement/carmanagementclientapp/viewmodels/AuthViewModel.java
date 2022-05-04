@@ -4,8 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
-import com.intelligentcarmanagement.carmanagementclientapp.services.TokenService;
-import com.intelligentcarmanagement.carmanagementclientapp.utils.JwtParser;
+
+import com.intelligentcarmanagement.carmanagementclientapp.services.JwtTokenService;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.SessionManager;
 
 import java.util.Map;
@@ -22,20 +22,20 @@ public class AuthViewModel extends AndroidViewModel {
     // Return true if the user token is valid
     // and false if it is null or expired
     public boolean IsAuthenticated() {
-        String token = sessionManager.getUserData().get(sessionManager.KEY_TOKEN);
+        String token = sessionManager.getUserData().get(sessionManager.KEY_JWT_TOKEN);
         if (token == null) {
             Log.d("AuthViewModel", "Token not found.");
             return false;
         }
 
         try {
-            claims = new TokenService().decodePayloadClaims(token);
+            claims = new JwtTokenService().decodePayloadClaims(token);
 
             Log.d("AuthViewModel", "Claims: " + claims.values());
 
             // If the token is expired
             // remove it and redirect the user to the login screen
-            if(TokenService.isTokenExpired(Long.parseLong(String.valueOf(claims.get("exp"))))) {
+            if(JwtTokenService.isTokenExpired(Long.parseLong(String.valueOf(claims.get("exp"))))) {
                 Log.d("AuthViewModel", "Token expired.");
                 sessionManager.clearSession();
                 return false;

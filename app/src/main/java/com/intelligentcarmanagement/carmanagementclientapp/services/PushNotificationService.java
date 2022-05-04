@@ -6,15 +6,23 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.intelligentcarmanagement.carmanagementclientapp.api.notifications.responses.IUpdateToken;
+import com.intelligentcarmanagement.carmanagementclientapp.repositories.notifications.INotificationsRepository;
+import com.intelligentcarmanagement.carmanagementclientapp.repositories.notifications.NotificationsRepository;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.SessionManager;
+
+import java.util.HashMap;
 
 public class PushNotificationService extends FirebaseMessagingService {
     private static final String TAG = "PushNotificationService";
     private NotificationsManager mNotificationManager;
+    private SessionManager mSessionManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mNotificationManager = new NotificationsManager(this);
+        mSessionManager = new SessionManager(this);
     }
 
     @Override
@@ -41,10 +49,6 @@ public class PushNotificationService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-        //sendRegistrationToServer(token);
+        mSessionManager.addFirebaseToken(token);
     }
 }
