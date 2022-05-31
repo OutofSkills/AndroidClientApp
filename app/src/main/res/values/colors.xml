@@ -27,4 +27,5 @@
     <color name="dark_grey">#a9a9a9</color>
     <color name="darker_grey">#878787</color>
     <color name="color_green">#3bd391</color>
+    <color name="color_violet">#8F00FF</color>
 </resources>

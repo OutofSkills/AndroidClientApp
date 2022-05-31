@@ -9,6 +9,7 @@
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_baseline_arrow_forward_ios_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_baseline_lock_open_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_menu_camera.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_outline_directions_car_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_outline_edit_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/ic_outline_save_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/drawable/password_toggle.xml" value="0.26614583333333336" />
@@ -30,6 +31,7 @@
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_settings.xml" value="0.25" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_splash.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/activity_success.xml" value="0.234375" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/content_layout.xml" value="0.17300724637681159" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/drawer_header_layout.xml" value="0.18333333333333332" />
         <entry key="..\:/Users/kojoc/AndroidStudioProjects/CarManagementClientApp/app/src/main/res/layout/fragment_register_first_step.xml" value="0.2359375" />

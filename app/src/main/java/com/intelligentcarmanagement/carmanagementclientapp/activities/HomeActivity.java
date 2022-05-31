@@ -37,7 +37,8 @@ import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.EncodedPolyline;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityHomeBinding;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.HaversineAlgorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     private Polyline polyline;
 
     // Ride data
-    private Ride ride;
+    private Ride ride = new Ride();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,45 +246,69 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
     // Define the event listeners here
     private void setEventListeners() {
         // Pick up edit text event listeners
-        pickUpEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (view.hasFocus()) {
-                    pickUpRequest = true;
-                    searchPlace();
-                }
-            }
-        });
-        pickUpEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickUpRequest = true;
-                searchPlace();
-            }
-        });
-
-        // Destination edit text event listeners
-        destinationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (view.hasFocus()) {
-                    destinationRequest = true;
-                    searchPlace();
-                }
-            }
-        });
-        destinationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                destinationRequest = true;
-                searchPlace();
-            }
-        });
+//        pickUpEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (view.hasFocus()) {
+//                    pickUpRequest = true;
+//                    searchPlace();
+//                }
+//            }
+//        });
+//        pickUpEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                pickUpRequest = true;
+//                searchPlace();
+//            }
+//        });
+//
+//        // Destination edit text event listeners
+//        destinationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View view, boolean b) {
+//                if (view.hasFocus()) {
+//                    destinationRequest = true;
+//                    searchPlace();
+//                }
+//            }
+//        });
+//        destinationEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                destinationRequest = true;
+//                searchPlace();
+//            }
+//        });
 
         // Ride request submit button
         submitRideRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
+                 * Improvised section
+                 * delete after solving google api problems
+                 */
+                ride.setPickUpPlaceName(pickUpEditText.getText().toString());
+                ride.setPickUpPlaceAddress(pickUpEditText.getText().toString());
+                ride.setPickUpLat(String.valueOf("45.9232"));
+                ride.setPickUpPlaceLong(String.valueOf("24.9668"));
+
+                ride.setDestinationPlaceName(destinationEditText.getText().toString());
+                ride.setDestinationPlaceAddress(destinationEditText.getText().toString());
+                ride.setDestinationPlaceLat(String.valueOf("45.9432"));
+                ride.setDestinationPlaceLong(String.valueOf("24.9668"));
+
+                double distance = HaversineAlgorithm.HaversineInKM(
+                        Double.parseDouble(ride.getPickUpPlaceLat()),
+                        Double.parseDouble(ride.getPickUpPlaceLong()),
+                        Double.parseDouble(ride.getDestinationPlaceLat()),
+                        Double.parseDouble(ride.getDestinationPlaceLong())
+                );
+                ride.setDistance(distance);
+
+                /* End section*/
+
                 Intent intent = new Intent(HomeActivity.this, AvailableDriversActivity.class);
                 intent.putExtra("RideRequest", ride);
                 startActivity(intent);
@@ -308,8 +333,15 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
             submitRideRequest.setEnabled(true);
             drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpPlaceLong())),
                     new LatLng(Double.valueOf(ride.getDestinationPlaceLat()), Double.valueOf(ride.getDestinationPlaceLong())));
-            // TODO: Calculate the distance between the 2 points
-            ride.setDistance(10.21);
+
+            double distance = HaversineAlgorithm.HaversineInKM(
+                    Double.parseDouble(ride.getPickUpPlaceLat()),
+                    Double.parseDouble(ride.getPickUpPlaceLong()),
+                    Double.parseDouble(ride.getDestinationPlaceLat()),
+                    Double.parseDouble(ride.getDestinationPlaceLong())
+            );
+
+            ride.setDistance(distance);
         }
         else
         {
@@ -335,8 +367,15 @@ public class HomeActivity extends DrawerBaseActivity implements OnMapReadyCallba
             submitRideRequest.setEnabled(true);
             drawRoute(new LatLng(Double.valueOf(ride.getPickUpLat()), Double.valueOf(ride.getPickUpPlaceLong())),
                     new LatLng(Double.valueOf(ride.getDestinationPlaceLat()), Double.valueOf(ride.getDestinationPlaceLong())));
-            // TODO: Calculate the distance between the 2 points
-            ride.setDistance(12.21);
+
+            double distance = HaversineAlgorithm.HaversineInKM(
+                    Double.parseDouble(ride.getPickUpPlaceLat()),
+                    Double.parseDouble(ride.getPickUpPlaceLong()),
+                    Double.parseDouble(ride.getDestinationPlaceLat()),
+                    Double.parseDouble(ride.getDestinationPlaceLong())
+            );
+
+            ride.setDistance(distance);
         }
         else
         {

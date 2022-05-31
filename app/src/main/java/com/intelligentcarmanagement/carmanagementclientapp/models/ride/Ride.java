@@ -1,7 +1,12 @@
-package com.intelligentcarmanagement.carmanagementclientapp.models;
+package com.intelligentcarmanagement.carmanagementclientapp.models.ride;
+
+import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.Constants;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Ride implements Serializable {
     private int id;
@@ -17,24 +22,54 @@ public class Ride implements Serializable {
     private String destinationPlaceLong;
     private double distance;
     private double averageTime;
-    private Date pickUpTime;
+    private String pickUpTime;
+    private Driver driver;
+    private RideState rideState;
 
     public Ride() {
     }
 
-    public Ride(int rideId, int driverId, String pickUpPlaceAddress, String pickUpPlaceName, String destinationPlaceAddress, String destinationPlaceName, String pickUpLat, String pickUpLng, String destinationLat, String destinationLng, double rideDistance, Date date) {
-        this.id = rideId;
+    public Ride(int id, int driverId, int clientId, String pickUpPlaceAddress, String pickUpPlaceName, String destinationPlaceAddress, String destinationPlaceName, String pickUpPlaceLat, String pickUpPlaceLong, String destinationPlaceLat, String destinationPlaceLong, double distance, double averageTime, String pickUpTime, Driver client, RideState rideState) {
+        this.id = id;
         this.driverId = driverId;
+        this.clientId = clientId;
         this.pickUpPlaceAddress = pickUpPlaceAddress;
         this.pickUpPlaceName = pickUpPlaceName;
         this.destinationPlaceAddress = destinationPlaceAddress;
         this.destinationPlaceName = destinationPlaceName;
-        this.pickUpPlaceLat = pickUpLat;
-        this.pickUpPlaceLong = pickUpLng;
-        this.destinationPlaceLat = destinationLat;
-        this.destinationPlaceLong = destinationLng;
-        this.distance = rideDistance;
-        this.pickUpTime = date;
+        this.pickUpPlaceLat = pickUpPlaceLat;
+        this.pickUpPlaceLong = pickUpPlaceLong;
+        this.destinationPlaceLat = destinationPlaceLat;
+        this.destinationPlaceLong = destinationPlaceLong;
+        this.distance = distance;
+        this.averageTime = averageTime;
+        this.pickUpTime = pickUpTime;
+        this.driver = driver;
+        this.rideState = rideState;
+    }
+
+    public RideState getRideState() {
+        return rideState;
+    }
+
+    public void setRideState(RideState rideState) {
+        this.rideState = rideState;
+    }
+
+    public String getPickUpPlaceLat() {
+        return pickUpPlaceLat;
+    }
+
+    public void setPickUpPlaceLat(String pickUpPlaceLat) {
+        this.pickUpPlaceLat = pickUpPlaceLat;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     public int getClientId() {
@@ -46,7 +81,9 @@ public class Ride implements Serializable {
     }
 
     public double getAverageTime() {
-        return averageTime;
+        double averageSpeed = 40 * Constants.KM_HOUR_TO_MINUTES; //40 KM/H to minutes
+
+        return distance / averageSpeed;
     }
 
     public double getDistance() {
@@ -54,10 +91,7 @@ public class Ride implements Serializable {
     }
 
     public void setDistance(double distance) {
-        double averageSpeed = 40; // Km/h
-
         this.distance = distance;
-        this.averageTime = distance /averageSpeed;
     }
 
     public int getId() {
@@ -85,10 +119,15 @@ public class Ride implements Serializable {
     }
 
     public Date getPickUpTime() {
-        return pickUpTime;
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.ENGLISH).parse(pickUpTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void setPickUpTime(Date pickUpTime) {
+    public void setPickUpTime(String pickUpTime) {
         this.pickUpTime = pickUpTime;
     }
 

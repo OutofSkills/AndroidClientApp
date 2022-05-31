@@ -1,6 +1,7 @@
 package com.intelligentcarmanagement.carmanagementclientapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.ImageConverter;
+
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder>{
+    private static final String TAG = "HistoryRecyclerViewAdapter";
     Context mContext;
     ArrayList<Ride> mRides = new ArrayList<Ride>();
 
-    public HistoryRecyclerViewAdapter(Context mContext, ArrayList<Ride> mRides) {
-        this.mRides = mRides;
-        this.mContext = mContext;
+    public HistoryRecyclerViewAdapter(Context context, ArrayList<Ride> rides) {
+        this.mRides = rides;
+        this.mContext = context;
     }
 
     @NonNull
@@ -34,11 +41,23 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.historyRideId.setText("#" + String.valueOf(mRides.get(position).getId()));
-        holder.historyRideDate.setText(String.format("%1$tY-%1$tm-%1$td", mRides.get(position).getPickUpTime()));
-        holder.historyRidePickUpCity.setText(mRides.get(position).getPickUpPlaceName());
-        holder.historyRideDestinationCity.setText(mRides.get(position).getDestinationPlaceName());
-        holder.historyRideDistance.setText(String.format("%.2f", mRides.get(position).getDistance()) + "km");
+        PrettyTime p = new PrettyTime();
+        p.setLocale(Locale.ENGLISH);
+        holder.rideDate.setText(p.format(mRides.get(position).getPickUpTime()));
+
+        holder.ridePickUpAddress.setText(mRides.get(position).getPickUpPlaceName());
+        holder.rideDestinationAddress.setText(mRides.get(position).getDestinationPlaceName());
+        holder.rideDistance.setText(String.format("%.2f", mRides.get(position).getDistance()) + "km");
+        // TODO: money
+        holder.rideTotalMoney.setText("10$");
+
+        holder.rideTime.setText(String.format("%.2f", mRides.get(position).getAverageTime()) + " min");
+        holder.driverUsername.setText(mRides.get(position).getDriver().getEmail());
+
+        String string64 = mRides.get(position).getDriver().getAvatar();
+        byte[] imageBytes = ImageConverter.convertBase64ToBytes(string64);
+        Bitmap bmp = ImageConverter.convertBytesToBitmap(imageBytes);
+        holder.driverAvatar.setImageBitmap(bmp);
     }
 
     @Override
@@ -47,16 +66,22 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView historyRideId, historyRideDate, historyRidePickUpCity, historyRideDestinationCity, historyRideDistance;
+        TextView rideDate, ridePickUpAddress, rideDestinationAddress, rideDistance, rideTime, rideTotalMoney;
+        TextView driverUsername, driverRating;
+        ShapeableImageView driverAvatar;
         RelativeLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            historyRideId = itemView.findViewById(R.id.historyRideId);
-            historyRideDate = itemView.findViewById(R.id.historyRideDate);
-            historyRidePickUpCity = itemView.findViewById(R.id.historyRidePickUp);
-            historyRideDestinationCity = itemView.findViewById(R.id.historyRideDestination);
-            historyRideDistance = itemView.findViewById(R.id.historyRideDistance);
+            rideDate = itemView.findViewById(R.id.history_ride_date);
+            ridePickUpAddress = itemView.findViewById(R.id.history_ride_from);
+            rideDestinationAddress = itemView.findViewById(R.id.history_ride_to);
+            rideDistance = itemView.findViewById(R.id.history_ride_total_distance);
+            rideTime = itemView.findViewById(R.id.history_ride_total_time);
+            rideTotalMoney = itemView.findViewById(R.id.history_ride_total_money);
+            driverAvatar = itemView.findViewById(R.id.history_ride_driver_avatar);
+            driverUsername = itemView.findViewById(R.id.history_ride_driver_username);
+            driverRating = itemView.findViewById(R.id.history_ride_driver_rating);
             parentLayout = itemView.findViewById(R.id.historyItemParentLayout);
         }
     }

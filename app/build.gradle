@@ -81,6 +81,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     // Firebase messaging
     implementation 'com.google.firebase:firebase-messaging:'
+    // Date formatter -- time ago
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 }
 
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin

@@ -50,6 +50,7 @@
                         android:background="@drawable/circle">
 
                         <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/confirm_request_driver_avatar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="10"
@@ -66,6 +67,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/confirm_request_driver_username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="kojocaru.ivan@gmail.com"
@@ -84,11 +86,30 @@
                                 app:tint="@color/colorSecondary"/>
 
                             <TextView
+                                android:id="@+id/confirm_request_driver_rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginLeft="5dp"
                                 android:text="4.9"
+                                android:textSize="14dp"
+                                android:textColor="@color/black" />
+
+                            <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:src="@drawable/ic_outline_car_crash_24"
+                                android:tooltipText="Driving accuracy"
+                                app:tint="@color/quantum_error_light"/>
+
+                            <TextView
+                                android:id="@+id/confirm_request_driver_accuracy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginLeft="5dp"
+                                android:text="79%"
                                 android:textSize="14dp"
                                 android:textColor="@color/black" />
                         </LinearLayout>
@@ -108,6 +129,7 @@
                     android:background="@color/dark_grey"/>
 
                 <TextView
+                    android:id="@+id/confirm_request_driver_car"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -242,36 +264,65 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:padding="10dp"
                     android:weightSum="2"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/confirm_request_distance"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="10km"
-                        android:textSize="12dp"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:drawableLeft="@drawable/ic_outline_timeline_24"
-                        android:drawableTint="@color/colorAccent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/confirm_request_avg_time"
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_outline_timeline_24"
+                            app:tint="@color/colorAccent"
+                            />
+
+                        <TextView
+                            android:id="@+id/confirm_request_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10km"
+                            android:textSize="12dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/black"
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="10min"
-                        android:textSize="12dp"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black"
-                        android:drawableLeft="@drawable/ic_outline_av_timer_24"
-                        android:drawableTint="@color/colorAccent"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_outline_av_timer_24"
+                            app:tint="@color/colorAccent"
+                            />
+
+                        <TextView
+                            android:id="@+id/confirm_request_avg_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10min"
+                            android:textSize="12dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/black"
+                            />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
             </LinearLayout>

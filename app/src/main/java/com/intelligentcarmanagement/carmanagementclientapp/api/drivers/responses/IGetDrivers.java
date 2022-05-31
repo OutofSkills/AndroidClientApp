@@ -1,4 +1,4 @@
-package com.intelligentcarmanagement.carmanagementclientapp.api.drivers;
+package com.intelligentcarmanagement.carmanagementclientapp.api.drivers.responses;
 
 import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.User;

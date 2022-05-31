@@ -1,29 +1,38 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.adapters.HistoryRecyclerViewAdapter;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityHistoryBinding;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.HistoryViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class HistoryActivity extends DrawerBaseActivity {
+    private static final String TAG = "HistoryActivity";
     ActivityHistoryBinding activityHistoryBinding;
 
     // History recycler view
-    RecyclerView recyclerView;
-    HistoryRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private HistoryRecyclerViewAdapter adapter;
 
-    // History rides
-    ArrayList<Ride> historyRides = new ArrayList<Ride>();
+    // Circular progress
+    private CircularProgressIndicator mProgressIndicator;
+    // Refresh layout
+    private SwipeRefreshLayout mRefreshLayout;
+
+    private HistoryViewModel mHistoryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,28 +42,57 @@ public class HistoryActivity extends DrawerBaseActivity {
         allocateActivityTitle("History");
 
         recyclerView = findViewById(R.id.historyRecyclerView);
+        mProgressIndicator = findViewById(R.id.history_progress_indicator);
+        mRefreshLayout = findViewById(R.id.history_refresh_layout);
 
-        seedHistoryData();
+        mHistoryViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+
+        setEventListeners();
+
+        mHistoryViewModel.fetchHistory();
     }
 
-    private void initRecyclerView()
+    private void setEventListeners() {
+        mHistoryViewModel.getRides().observe(HistoryActivity.this, rides -> initRecyclerView(rides));
+
+        mHistoryViewModel.getProcessingState().observe(HistoryActivity.this, state -> {
+            switch (state){
+                case ERROR:
+                    displayRetryBottomDialog();
+                    mProgressIndicator.setVisibility(View.GONE);
+                    break;
+                case SUCCESS:
+                    Log.d(TAG, "onChanged: done");
+                    mProgressIndicator.setVisibility(View.GONE);
+                    break;
+                case START:
+                    Log.d(TAG, "onChanged: start");
+                    mProgressIndicator.setVisibility(View.VISIBLE);
+                    mProgressIndicator.bringToFront();
+                    break;
+            }
+        });
+
+        mRefreshLayout.setOnRefreshListener(() -> {
+            mRefreshLayout.setRefreshing(false);
+            mHistoryViewModel.fetchHistory();
+        });
+    }
+
+    private void initRecyclerView(ArrayList<Ride> rides)
     {
-        adapter = new HistoryRecyclerViewAdapter(this, historyRides);
+        adapter = new HistoryRecyclerViewAdapter(this, rides);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void seedHistoryData()
-    {
-        historyRides.add(new Ride(1, 0, "", "Craiova", "", "Bucuresti", "23.94", "23.98", "23.94", "23.98"
-                , 24.54, new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()));
+    private void displayRetryBottomDialog() {
+        final Snackbar snackBar = Snackbar.make(findViewById(android.R.id.content), "Something went wrong.", Snackbar.LENGTH_INDEFINITE);
 
-        historyRides.add(new Ride(1, 0, "", "Craiova", "", "Bucuresti", "23.94", "23.98", "23.94", "23.98"
-                , 24.54, new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()));
-
-        historyRides.add(new Ride(1, 0, "", "Craiova", "", "Bucuresti", "23.94", "23.98", "23.94", "23.98"
-                , 24.54, new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime()));
-
-        initRecyclerView();
+        snackBar.setAction("Retry", v -> {
+            mHistoryViewModel.fetchHistory();
+            snackBar.dismiss();
+        });
+        snackBar.show();
     }
 }
