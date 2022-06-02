@@ -113,12 +113,44 @@
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/history_ride_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:numStars="5"
+                        android:stepSize="0.1"
+                        android:isIndicator="true" />
+
+                    <ImageView
+                        android:id="@+id/history_ride_rating_save"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_outline_check_24"
+                        app:tint="@color/color_green"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+            </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
-                android:weightSum="100">
+                android:weightSum="100"
+                android:background="@color/light_grey">
 
                 <TextView
                     android:id="@+id/history_ride_from"
@@ -144,14 +176,6 @@
                     android:maxLines="1"/>
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/dark_grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

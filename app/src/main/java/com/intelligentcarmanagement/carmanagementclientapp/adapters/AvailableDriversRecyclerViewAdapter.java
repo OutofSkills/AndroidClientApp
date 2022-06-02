@@ -55,8 +55,8 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
         holder.driverAvatar.setImageBitmap(bitmap);
         holder.driverUsername.setText(mDrivers.get(position).getUserName());
         holder.driverRating.setText(String.valueOf(mDrivers.get(position).getRating()));
-        // TODO: set driving accuracy
-        holder.driverAccuracy.setText("78" + "%");
+        holder.driverAccuracy.setText(String.format("%.2f", mDrivers.get(position).getAccuracy()) + '%');
+        holder.driverRating.setText(String.format("%.2f", mDrivers.get(position).getRating()));
 
         double distance = HaversineAlgorithm.HaversineInKM(
                 Double.parseDouble(mRide.getPickUpPlaceLat()),
@@ -66,17 +66,14 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
         );
         holder.driverDistanceAway.setText(String.format("%.2f", distance) +"Km");
 
-        holder.chooseDriverButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, ConfirmRideRequestActivity.class);
-                // On click on a driver layout
-                // navigate to request confirmation view and
-                // transmit the complete ride data
-                mRide.setDriverId(mDrivers.get(holder.getAdapterPosition()).getId());
-                intent.putExtra("RideRequest", mRide);
-                mContext.startActivity(intent);
-            }
+        holder.chooseDriverButton.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, ConfirmRideRequestActivity.class);
+            // On click on a driver layout
+            // navigate to request confirmation view and
+            // transmit the complete ride data
+            mRide.setDriverId(mDrivers.get(holder.getAdapterPosition()).getId());
+            intent.putExtra("RideRequest", mRide);
+            mContext.startActivity(intent);
         });
     }
 

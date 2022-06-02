@@ -33,8 +33,15 @@ public class Driver {
     private String currentLong;
     @SerializedName("rating")
     private float rating;
+    @SerializedName("accuracy")
+    private double accuracy;
     @SerializedName("isAvailable")
     private boolean isAvailable;
+
+    public Driver(double accuracy) {
+        this.accuracy = accuracy;
+    }
+
 
     public void setId(int id) {
         this.id = id;
@@ -162,5 +169,13 @@ public class Driver {
 
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
     }
 }

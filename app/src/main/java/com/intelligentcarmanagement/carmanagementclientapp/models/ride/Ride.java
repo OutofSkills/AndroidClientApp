@@ -1,6 +1,7 @@
 package com.intelligentcarmanagement.carmanagementclientapp.models.ride;
 
 import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.User;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.Constants;
 
 import java.io.Serializable;
@@ -22,14 +23,20 @@ public class Ride implements Serializable {
     private String destinationPlaceLong;
     private double distance;
     private double averageTime;
+    private double price;
     private String pickUpTime;
+    private User client;
     private Driver driver;
     private RideState rideState;
+    private Review review;
 
     public Ride() {
     }
 
-    public Ride(int id, int driverId, int clientId, String pickUpPlaceAddress, String pickUpPlaceName, String destinationPlaceAddress, String destinationPlaceName, String pickUpPlaceLat, String pickUpPlaceLong, String destinationPlaceLat, String destinationPlaceLong, double distance, double averageTime, String pickUpTime, Driver client, RideState rideState) {
+    public Ride(int id, int driverId, int clientId, String pickUpPlaceAddress, String pickUpPlaceName,
+                String destinationPlaceAddress, String destinationPlaceName, String pickUpPlaceLat, String pickUpPlaceLong,
+                String destinationPlaceLat, String destinationPlaceLong, double distance, double averageTime, double price,
+                String pickUpTime, User client, Driver driver, RideState rideState, Review review) {
         this.id = id;
         this.driverId = driverId;
         this.clientId = clientId;
@@ -43,9 +50,28 @@ public class Ride implements Serializable {
         this.destinationPlaceLong = destinationPlaceLong;
         this.distance = distance;
         this.averageTime = averageTime;
+        this.price = price;
         this.pickUpTime = pickUpTime;
+        this.client = client;
         this.driver = driver;
         this.rideState = rideState;
+        this.review = review;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public RideState getRideState() {
@@ -64,12 +90,12 @@ public class Ride implements Serializable {
         this.pickUpPlaceLat = pickUpPlaceLat;
     }
 
-    public Driver getDriver() {
-        return driver;
+    public User getClient() {
+        return client;
     }
 
-    public void setDriver(Driver driver) {
-        this.driver = driver;
+    public void setClient(User client) {
+        this.client = client;
     }
 
     public int getClientId() {
@@ -92,6 +118,7 @@ public class Ride implements Serializable {
 
     public void setDistance(double distance) {
         this.distance = distance;
+        this.price = distance * Constants.PRICE_PER_KM;
     }
 
     public int getId() {
@@ -185,5 +212,13 @@ public class Ride implements Serializable {
 
     public void setDestinationPlaceLong(String destinationPlaceLong) {
         this.destinationPlaceLong = destinationPlaceLong;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 }
