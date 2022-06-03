@@ -88,13 +88,11 @@ public class ConfirmRideRequestActivity extends DrawerBaseActivity {
             Bitmap bmp = ImageConverter.convertBytesToBitmap(imageBytes);
             driverAvatar.setImageBitmap(bmp);
 
-            // TODO: Accuracy and rating
-            driverRating.setText("4.9");
-            driverAccuracy.setText("81%");
+            driverRating.setText(String.format("%.2f", driver.getRating()));
+            driverAccuracy.setText(String.format("%.2f", driver.getAccuracy()) + '%');
         });
 
         confirmButton.setOnClickListener(view -> {
-            //TODO: handle confirm ride request
             mViewModel.requestRide(ride);
         });
 

@@ -43,6 +43,9 @@ public class ProfileActivity extends DrawerBaseActivity {
 
     // Gallery intent request code
     private static final int RESULT_LOAD_IMAGE = 563;
+
+    // Profile Statistics
+    private TextView ridesNumberTextView, ratingTextView;
     // Profile picture
     private ShapeableImageView profilePicture;
     // Image buttons
@@ -75,6 +78,8 @@ public class ProfileActivity extends DrawerBaseActivity {
         enableEditButton = findViewById(R.id.profile_enable_edit);
         chooseImageButton = findViewById(R.id.profile_choose_picture);
         // Profile text views
+        ridesNumberTextView = findViewById(R.id.profile_rides_number);
+        ratingTextView = findViewById(R.id.profile_rating);
         profileFirstName = findViewById(R.id.profileFirstName);
         profileLastName = findViewById(R.id.profileLastName);
         profilePhoneNumber = findViewById(R.id.profilePhoneNumber);
@@ -100,6 +105,7 @@ public class ProfileActivity extends DrawerBaseActivity {
         // Get the view model
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         profileViewModel.fetchUser();
+        profileViewModel.fetchRidesNumber();
 
         // Set event listeners
         setEventListeners();
@@ -108,62 +114,50 @@ public class ProfileActivity extends DrawerBaseActivity {
     private void setEventListeners()
     {
         // Edit button
-        enableEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableProfileEditViews(true);
-                enableProfileTextViews(false);
-            }
+        enableEditButton.setOnClickListener(view -> {
+            enableProfileEditViews(true);
+            enableProfileTextViews(false);
         });
 
         // Save button
-        saveProfileChangesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Change the user's data here
-                editUserProfile();
-                Toast.makeText(ProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
-            }
+        saveProfileChangesButton.setOnClickListener(view -> {
+            // Change the user's data here
+            editUserProfile();
+            Toast.makeText(ProfileActivity.this, "Saved", Toast.LENGTH_SHORT).show();
         });
 
         // Open gallery to choose a new image
-        chooseImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openGallery();
+        chooseImageButton.setOnClickListener(view -> openGallery());
+
+        // View model user data observer
+        profileViewModel.getUserMutableLiveData().observe(this, user -> {
+            if(user == null) {
+                Log.d(TAG, "User was null.");
+            }
+            else{
+                loadProfileData(user);
             }
         });
 
-        // View model user data observer
-        profileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                if(user == null) {
-                    Log.d(TAG, "User was null.");
-                }
-                else{
-                    loadProfileData(user);
-                }
-            }
+        // Rides Number observer
+        profileViewModel.getRidesNumber().observe(ProfileActivity.this, integer -> {
+            ridesNumberTextView.setText(String.valueOf(integer));
         });
 
         // Updating state
-        profileViewModel.getUpdatingMutableLiveData().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean state) {
-                if(state == true)
-                    Log.d(TAG, "State: editing");
-                else {
-                    Log.d(TAG, "State: done");
-                    // Enable the text views and disable the edit texts
-                    enableProfileEditViews(false);
-                    enableProfileTextViews(true);
+        profileViewModel.getUpdatingMutableLiveData().observe(this, state -> {
+            if(state == true)
+                Log.d(TAG, "State: editing");
+            else {
+                Log.d(TAG, "State: done");
+                // Enable the text views and disable the edit texts
+                enableProfileEditViews(false);
+                enableProfileTextViews(true);
 
-                    // Update the drawer avatar
-                    User user = profileViewModel.getUserMutableLiveData().getValue();
-                    byte[] imageBytes = ImageConverter.convertBase64ToBytes(user.getAvatar());
-                    userAvatar.setImageBitmap(ImageConverter.convertBytesToBitmap(imageBytes));
-                }
+                // Update the drawer avatar
+                User user = profileViewModel.getUserMutableLiveData().getValue();
+                byte[] imageBytes = ImageConverter.convertBase64ToBytes(user.getAvatar());
+                userAvatar.setImageBitmap(ImageConverter.convertBytesToBitmap(imageBytes));
             }
         });
     }
@@ -245,6 +239,7 @@ public class ProfileActivity extends DrawerBaseActivity {
             profileFirstName.setText(user.getFirstName());
             profileLastName.setText(user.getLastName());
             profilePhoneNumber.setText(user.getPhoneNumber());
+            ratingTextView.setText(String.format("%.2f/5", user.getRating()));
 
             // Edit texts
             profileAddressEdit.setText("Not specified yet");

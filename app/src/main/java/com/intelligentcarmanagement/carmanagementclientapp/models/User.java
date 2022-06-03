@@ -24,12 +24,14 @@ public class User implements Serializable {
     private String email;
     @SerializedName("userName")
     private String userName;
+    @SerializedName("rating")
+    private double rating;
     @SerializedName("addressId")
     private int addressId;
     @SerializedName("statusId")
     private int statusId;
 
-    public User(int id, String firstName, String lastName, int age, String phoneNumber, String registrationDate, String avatar, String email, String userName, int addressId, int statusId) {
+    public User(int id, String firstName, String lastName, int age, String phoneNumber, String registrationDate, String avatar, String email, String userName, double rating, int addressId, int statusId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +41,7 @@ public class User implements Serializable {
         this.avatar = avatar;
         this.email = email;
         this.userName = userName;
+        this.rating = rating;
         this.addressId = addressId;
         this.statusId = statusId;
     }
@@ -145,5 +148,13 @@ public class User implements Serializable {
                 ", userName='" + userName + '\'' +
                 ", addressId=" + addressId +
                 '}';
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
