@@ -8,7 +8,7 @@ import com.intelligentcarmanagement.carmanagementclientapp.api.RetrofitService;
 import com.intelligentcarmanagement.carmanagementclientapp.api.drivers.IDriversRequests;
 import com.intelligentcarmanagement.carmanagementclientapp.api.drivers.responses.IGetDriver;
 import com.intelligentcarmanagement.carmanagementclientapp.api.drivers.responses.IGetDrivers;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 
 import java.util.List;
 

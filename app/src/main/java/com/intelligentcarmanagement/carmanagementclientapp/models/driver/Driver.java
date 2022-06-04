@@ -1,4 +1,4 @@
-package com.intelligentcarmanagement.carmanagementclientapp.models;
+package com.intelligentcarmanagement.carmanagementclientapp.models.driver;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -37,11 +37,29 @@ public class Driver {
     private double accuracy;
     @SerializedName("isAvailable")
     private boolean isAvailable;
+    @SerializedName("car")
+    private Car car;
 
-    public Driver(double accuracy) {
+    public Driver(int id, String firstName, String lastName, int age, String phoneNumber, String registrationDate, String avatar, String email, String userName, int addressId, int statusId, int deservedClients, String currentLat, String currentLong, float rating, double accuracy, boolean isAvailable, Car car) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.registrationDate = registrationDate;
+        this.avatar = avatar;
+        this.email = email;
+        this.userName = userName;
+        this.addressId = addressId;
+        this.statusId = statusId;
+        this.deservedClients = deservedClients;
+        this.currentLat = currentLat;
+        this.currentLong = currentLong;
+        this.rating = rating;
         this.accuracy = accuracy;
+        this.isAvailable = isAvailable;
+        this.car = car;
     }
-
 
     public void setId(int id) {
         this.id = id;
@@ -177,5 +195,13 @@ public class Driver {
 
     public void setAccuracy(double accuracy) {
         this.accuracy = accuracy;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 }

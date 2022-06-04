@@ -1,6 +1,6 @@
 package com.intelligentcarmanagement.carmanagementclientapp.models.ride;
 
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.User;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.Constants;
 

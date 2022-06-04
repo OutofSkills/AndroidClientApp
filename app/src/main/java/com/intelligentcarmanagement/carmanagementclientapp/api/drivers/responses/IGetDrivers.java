@@ -1,7 +1,6 @@
 package com.intelligentcarmanagement.carmanagementclientapp.api.drivers.responses;
 
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
-import com.intelligentcarmanagement.carmanagementclientapp.models.User;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 
 import java.util.List;
 

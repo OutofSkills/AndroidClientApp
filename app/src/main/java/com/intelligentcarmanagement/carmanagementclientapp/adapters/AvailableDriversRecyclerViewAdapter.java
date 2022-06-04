@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.activities.ConfirmRideRequestActivity;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.HaversineAlgorithm;
 import com.intelligentcarmanagement.carmanagementclientapp.utils.ImageConverter;
@@ -57,6 +56,7 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
         holder.driverRating.setText(String.valueOf(mDrivers.get(position).getRating()));
         holder.driverAccuracy.setText(String.format("%.2f", mDrivers.get(position).getAccuracy()) + '%');
         holder.driverRating.setText(String.format("%.2f", mDrivers.get(position).getRating()));
+        holder.driverCarTextView.setText(String.format("%s %s", mDrivers.get(position).getCar().getBrand(), mDrivers.get(position).getCar().getModel()));
 
         double distance = HaversineAlgorithm.HaversineInKM(
                 Double.parseDouble(mRide.getPickUpPlaceLat()),
@@ -84,7 +84,7 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView driverAvatar;
-        TextView driverUsername, driverRating, driverAccuracy, driverDistanceAway;
+        TextView driverUsername, driverRating, driverAccuracy, driverDistanceAway, driverCarTextView;
         Button chooseDriverButton;
         RelativeLayout parentLayout;
 
@@ -94,6 +94,7 @@ public class AvailableDriversRecyclerViewAdapter extends RecyclerView.Adapter<Av
             driverUsername = itemView.findViewById(R.id.driver_item_username);
             driverRating = itemView.findViewById(R.id.driver_item_rating);
             driverAccuracy = itemView.findViewById(R.id.driver_item_accuracy);
+            driverCarTextView = itemView.findViewById(R.id.driver_item_car);
             driverDistanceAway = itemView.findViewById(R.id.driver_item_distance);
             chooseDriverButton = itemView.findViewById(R.id.driver_item_choose_button);
             parentLayout = itemView.findViewById(R.id.driverItemParentLayout);

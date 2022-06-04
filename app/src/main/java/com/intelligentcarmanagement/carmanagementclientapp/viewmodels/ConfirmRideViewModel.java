@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.intelligentcarmanagement.carmanagementclientapp.api.drivers.responses.IGetDriver;
 import com.intelligentcarmanagement.carmanagementclientapp.api.rides.responses.IRequestRide;
 import com.intelligentcarmanagement.carmanagementclientapp.models.ApiResponse;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.drivers.DriversRepository;
 import com.intelligentcarmanagement.carmanagementclientapp.repositories.drivers.IDriversRepository;

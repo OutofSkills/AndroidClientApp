@@ -1,13 +1,11 @@
 package com.intelligentcarmanagement.carmanagementclientapp.activities;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,12 +17,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.intelligentcarmanagement.carmanagementclientapp.R;
 import com.intelligentcarmanagement.carmanagementclientapp.adapters.AvailableDriversRecyclerViewAdapter;
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityAvailableDriversBinding;
-import com.intelligentcarmanagement.carmanagementclientapp.models.Driver;
+import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
-import com.intelligentcarmanagement.carmanagementclientapp.utils.RequestState;
 import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.AvailableDriversViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableDriversActivity extends DrawerBaseActivity {
