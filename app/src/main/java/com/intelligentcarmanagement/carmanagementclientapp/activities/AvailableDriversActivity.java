@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.airbnb.lottie.L;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -19,8 +21,12 @@ import com.intelligentcarmanagement.carmanagementclientapp.adapters.AvailableDri
 import com.intelligentcarmanagement.carmanagementclientapp.databinding.ActivityAvailableDriversBinding;
 import com.intelligentcarmanagement.carmanagementclientapp.models.driver.Driver;
 import com.intelligentcarmanagement.carmanagementclientapp.models.ride.Ride;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.DriverDistanceComparator;
+import com.intelligentcarmanagement.carmanagementclientapp.utils.DrivingAccuracyComparator;
 import com.intelligentcarmanagement.carmanagementclientapp.viewmodels.AvailableDriversViewModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AvailableDriversActivity extends DrawerBaseActivity {
@@ -48,6 +54,9 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
     // Available drivers recycler view
     RecyclerView recyclerView;
     AvailableDriversRecyclerViewAdapter adapter;
+
+    // Original drivers list
+    private List<Driver> originalList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +96,17 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
 
         new MaterialAlertDialogBuilder(AvailableDriversActivity.this)
                 .setTitle("Filter Drivers")
-                .setPositiveButton("Filter", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
+                .setPositiveButton("Filter", (dialogInterface, i) -> {
+                    // Handle chosen option
+                    switch (checkedById[0]){
+                        case "Recommended drivers":
+                            List<Driver> recommendedDrivers = sortRecommended();
+                            initRecyclerView(recommendedDrivers);
+                            break;
+                        case "Closest drivers":
+                            List<Driver> closestDrivers = sortClosest();
+                            initRecyclerView(closestDrivers);
+                            break;
                     }
                 })
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -99,15 +115,28 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
 
                     }
                 })
-                .setSingleChoiceItems(filterOptions, checkedItem, new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        checkedItem = which;
-                        checkedById[0] = filterOptions[checkedItem];
-                    }
+                .setSingleChoiceItems(filterOptions, checkedItem, (dialogInterface, which) -> {
+                    checkedItem = which;
+                    checkedById[0] = filterOptions[checkedItem];
                 })
                 .show();
+    }
+
+    private List<Driver> sortClosest() {
+        List<Driver> closestList = originalList;
+        Collections.sort(closestList, new DriverDistanceComparator(
+                new LatLng(
+                        Double.parseDouble(ride.getPickUpPlaceLat()),
+                        Double.parseDouble(ride.getPickUpPlaceLong())
+                )
+        ));
+        return closestList;
+    }
+
+    private List<Driver> sortRecommended() {
+        List<Driver> recommendedList = originalList;
+        Collections.sort(recommendedList, new DrivingAccuracyComparator());
+        return recommendedList;
     }
 
     private void initRecyclerView(List<Driver> driverList)
@@ -118,7 +147,10 @@ public class AvailableDriversActivity extends DrawerBaseActivity {
     }
 
     private void setEventListeners() {
-        mViewModel.getDriversMutableData().observe(AvailableDriversActivity.this, driverList -> initRecyclerView(driverList));
+        mViewModel.getDriversMutableData().observe(AvailableDriversActivity.this, driverList -> {
+            originalList = driverList;
+            initRecyclerView(driverList);
+        });
 
         mViewModel.getDriversState().observe(AvailableDriversActivity.this, state -> {
             switch (state)
