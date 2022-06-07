@@ -5,12 +5,10 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,9 +25,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder>{
-    private static final String TAG = "HistoryRecyclerViewAdapter";
     Context mContext;
-    ArrayList<Ride> mRides = new ArrayList<Ride>();
+    ArrayList<Ride> mRides;
     private HistoryViewModel viewModel;
 
     public HistoryRecyclerViewAdapter(Context context, ArrayList<Ride> rides, HistoryViewModel viewModel) {
@@ -56,7 +53,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         holder.rideDestinationAddress.setText(mRides.get(position).getDestinationPlaceName());
         holder.rideDistance.setText(String.format("%.2f", mRides.get(position).getDistance()) + "km");
 
-        String price = String.valueOf(mRides.get(position).getPrice());
+        String price = String.format("%.2f", mRides.get(position).getPrice());
         holder.rideTotalMoney.setText(price);
 
         // Rating
@@ -85,7 +82,6 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         });
 
         holder.ratingSave.setOnClickListener(view -> {
-            // TODO: Save rating here
             viewModel.rateRide(mRides.get(holder.getAdapterPosition()).getId(), holder.ratingBar.getRating());
             holder.ratingSave.setVisibility(View.GONE);
         });
