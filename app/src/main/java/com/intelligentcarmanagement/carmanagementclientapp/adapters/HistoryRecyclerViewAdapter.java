@@ -73,11 +73,12 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
         // Rating handler
         holder.ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
-            if(v <= 0) {
-                ratingBar.setRating(1);
-            }
-            else {
-                holder.ratingSave.setVisibility(View.VISIBLE);
+            if(b) {
+                if (v <= 0) {
+                    ratingBar.setRating(1);
+                } else {
+                    holder.ratingSave.setVisibility(View.VISIBLE);
+                }
             }
         });
 

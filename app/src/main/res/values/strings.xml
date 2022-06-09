@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CarManagementClientApp</string>
+    <string name="app_name">Client App</string>
     <string name="menu_drawer_open">Drawer Open</string>
     <string name="menu_drawer_close">Drawer Close</string>
     <!-- TODO: Remove or change this placeholder text -->
